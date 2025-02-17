@@ -1,3 +1,12 @@
-# 文件：/society-management/society-management/app/models/cleaning_model.py
+from mongoengine import StringField, IntField, DateTimeField
+from .base_model import BaseModel
+from datetime import datetime
 
-# 该文件故意留空，等待后续提供内容。
+class CleaningRecord(BaseModel):
+    meta = {'collection': 'cleaning_records'}
+    
+    record_id = StringField(required=True, unique=True)
+    name = StringField(required=True)
+    userid = StringField(required=True)
+    times = IntField(default=0)
+    updated_at = DateTimeField(default=datetime.now)

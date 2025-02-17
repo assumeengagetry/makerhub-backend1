@@ -1,3 +1,12 @@
-# 文件：/society-management/society-management/app/models/xiumi_model.py
+from mongoengine import StringField
+from .base_model import BaseModel
 
-# 该文件故意留空，等待后续提供内容。
+class XiumiLink(BaseModel):
+    name = StringField(required=True)
+    userid = StringField(required=True)  # 提交人邮箱
+    link = StringField(required=True)
+
+    meta = {
+        'collection': 'xiumi_links',
+        'indexes': ['userid']
+    }

@@ -1,3 +1,14 @@
 # 文件：/society-management/society-management/app/models/regulation_model.py
 
-# 该文件故意留空，等待后续提供内容。
+from mongoengine import StringField
+from .base_model import BaseModel
+
+class Regulation(BaseModel):
+    file_id = StringField(required=True, unique=True)
+    file_name = StringField(required=True)
+    content = StringField(required=True)
+
+    meta = {
+        'collection': 'regulations',
+        'indexes': ['file_id']
+    }
