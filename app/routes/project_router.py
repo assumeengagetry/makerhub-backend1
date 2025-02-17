@@ -1,65 +1,57 @@
-from flask import Blueprint, request, jsonify
+from fastapi import APIRouter, HTTPException
 from app.models.project_model import Project
 from datetime import datetime
+from typing import List, Optional
+from pydantic import BaseModel
 
-project_bp = Blueprint('project', __name__)
+router = APIRouter()
 
-@project_bp.route('/project', methods=['POST'])
-def create_project():
-    data = request.get_json()
+class ProjectCreate(BaseModel):
+    apply_id: str
+    project_name: str
+    director: str
+    college: str
+    major_grade: str
+    phone_num: str
+    email: str
+    mentor: str
+    description: Optional[str] = ""
+    application_file: Optional[str] = ""
+    prove_file: Optional[str] = ""
+    member: Optional[List[str]] = []
+    start_time: datetime
+    end_time: datetime
+
+@router.post("/project", status_code=201)
+async def create_project(project: ProjectCreate):
     try:
-        project = Project(
-            apply_id=data['apply_id'],
-            project_name=data['project_name'],
-            director=data['director'],
-            college=data['college'],
-            major_grade=data['major_grade'],
-            phone_num=data['phone_num'],
-            email=data['email'],
-            mentor=data['mentor'],
-            description=data.get('description', ''),
-            application_file=data.get('application_file', ''),
-            prove_file=data.get('prove_file', ''),
-            member=data.get('member', []),
-            start_time=datetime.strptime(data['start_time'], '%Y-%m-%d'),
-            end_time=datetime.strptime(data['end_time'], '%Y-%m-%d')
-        ).save()
-        return jsonify({'message': '项目创建成功', 'id': str(project.id)}), 201
+        new_project = Project(**project.dict()).save()
+        return {"message": "项目创建成功", "id": str(new_project.id)}
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        raise HTTPException(status_code=400, detail=str(e))
 
-@project_bp.route('/project/<apply_id>', methods=['GET'])
-def get_project(apply_id):
-    try:
-        project = Project.objects(apply_id=apply_id).first()
-        if project:
-            return jsonify(project.to_dict()), 200
-        return jsonify({'error': '项目不存在'}), 404
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+@router.get("/project/{apply_id}")
+async def get_project(apply_id: str):
+    project = Project.objects(apply_id=apply_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="项目不存在")
+    return project.to_dict()
 
-@project_bp.route('/project/<apply_id>', methods=['PUT'])
-def update_project(apply_id):
-    data = request.get_json()
-    try:
-        project = Project.objects(apply_id=apply_id).first()
-        if not project:
-            return jsonify({'error': '项目不存在'}), 404
-            
-        if 'audit_state' in data:
-            project.audit_state = data['audit_state']
-        if 'project_state' in data:
-            project.project_state = data['project_state']
-        
-        project.save()
-        return jsonify({'message': '项目更新成功'}), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+@router.put("/project/{apply_id}")
+async def update_project(apply_id: str, audit_state: Optional[str] = None, project_state: Optional[str] = None):
+    project = Project.objects(apply_id=apply_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="项目不存在")
+    
+    if audit_state:
+        project.audit_state = audit_state
+    if project_state:
+        project.project_state = project_state
+    
+    project.save()
+    return {"message": "项目更新成功"}
 
-@project_bp.route('/projects', methods=['GET'])
-def get_projects():
-    try:
-        projects = Project.objects()
-        return jsonify([project.to_dict() for project in projects]), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 400
+@router.get("/projects")
+async def get_projects():
+    projects = Project.objects()
+    return [project.to_dict() for project in projects]
