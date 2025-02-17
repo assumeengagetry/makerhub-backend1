@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:5.0
+    container_name: mongo
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - backend
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: your-access-key
+      MINIO_SECRET_KEY: your-secret-key
+    command: server /data
+    volumes:
+      - minio_data:/data
+    networks:
+      - backend
+
+  backend:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: society_backend
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+      - minio
+    networks:
+      - backend
+
+networks:
+  backend:
+
+volumes:
+  mongo_data:
+  minio_data:
