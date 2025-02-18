@@ -10,7 +10,7 @@ class UserService:
         self.db = get_db()
         self.collection = self.db.users
 
-    async def create_user(self, user: User) -> dict:
+    async def create_user(self, user: User) -> dict:    # 這地方一定要確保使用的是支持 async 操作的 MongoDB 驅動（如 motor）。如果沒有使用 motor，操作將不會是異步的。
         try:
             user_dict = user.dict(exclude_unset=True)
             user_dict.update({
