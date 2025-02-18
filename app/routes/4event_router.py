@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.event_model import Event
+from app.models.e4vent_model import Event
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel

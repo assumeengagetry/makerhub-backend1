@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.regulation_model import Regulation
+from app.models.r2egulation_model import Regulation
 from typing import Optional
 from pydantic import BaseModel
 

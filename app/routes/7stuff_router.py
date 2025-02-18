@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.stuff_model import Stuff
+from app.models.s7tuff_model import Stuff
 from typing import Optional
 from pydantic import BaseModel
 

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.games_model import Game
+from app.models.c10ompetition_model import Game
 from pydantic import BaseModel
 from datetime import datetime
 

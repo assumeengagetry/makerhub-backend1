@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.publicity_link_model import PublicityLink
+from app.models.x16iumi_model import PublicityLink
 from pydantic import BaseModel
 
 router = APIRouter()

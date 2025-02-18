@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.clean_model import Clean
+from app.models.c13leaning_model import CleaningRecord
 from pydantic import BaseModel
 
 router = APIRouter()
@@ -12,10 +12,10 @@ class CleaningRecord(BaseModel):
 
 @router.post("/cleaning")
 async def create_cleaning_record(record: CleaningRecord):
-    new_record = await Clean(**record.dict()).save()
+    new_record = await CleaningRecord(**record.dict()).save()
     return {"message": "清洁记录创建成功", "id": str(new_record.id)}
 
 @router.get("/cleaning/{userid}")
 async def get_cleaning_records(userid: str):
-    records = await Clean.objects(userid=userid).all()
+    records = await CleaningRecord.objects(userid=userid).all()
     return [record.dict() for record in records]

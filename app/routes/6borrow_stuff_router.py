@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.stuff_borrow_model import StuffBorrow
+from app.models.b6orrow_stuff_model import StuffBorrow
 from pydantic import BaseModel
 from datetime import datetime
 

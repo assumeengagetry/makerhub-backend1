@@ -23,7 +23,8 @@ from app.routes import (
     printer_router,
     project_router,
     event_router,
-    regulation_router
+    regulation_router,
+    resource_router,
 )
 
 # 初始化应用
@@ -86,6 +87,7 @@ app.include_router(item_router.router, prefix=f"{PREFIX}/items", tags=["物品�
 app.include_router(borrow_router.router, prefix=f"{PREFIX}/borrows", tags=["借用管理"])
 app.include_router(venue_router.router, prefix=f"{PREFIX}/venues", tags=["场地管理"])
 app.include_router(printer_router.router, prefix=f"{PREFIX}/printers", tags=["打印管理"])
+app.include_router(resource_router.router, prefix=f"{PREFIX}/resources", tags=["资源管理"])
 
 # 活动管理
 app.include_router(event_router.router, prefix=f"{PREFIX}/events", tags=["活动管理"])

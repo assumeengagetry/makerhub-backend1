@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.print_model import Print
+from app.models.p3rinter_model import Print
 from typing import Optional
 from pydantic import BaseModel
 

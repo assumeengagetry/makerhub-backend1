@@ -1,7 +1,7 @@
 # filepath: /society-management/society-management/app/routes/user_router.py
 
 from fastapi import APIRouter, HTTPException
-from app.models.user_model import User
+from app.models.u1ser_model import User
 from typing import Optional
 from pydantic import BaseModel
 from passlib.hash import bcrypt

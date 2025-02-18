@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.arrange_model import Arrange
+from app.models.s14chedule_model import Arrange
 from pydantic import BaseModel
 
 router = APIRouter()
