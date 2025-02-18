@@ -6,7 +6,7 @@ from loguru import logger
 
 from app.core.config import settings
 from app.core.logging import setup_logging
-from app.middleware.auth_middleware import AuthMiddleware
+from app.core.auth_middleware import AuthMiddleware
 from app.utils.mongo_utils import mongo
 from app.routes import (
     user_router,
@@ -28,8 +28,8 @@ from app.routes import (
 
 # 初始化应用
 app = FastAPI(
-    title="创客汇管理系统API",
-    description="创客汇后端API文档",
+    title="MakerHub API",
+    description="MakerHub后端API",
     version="1.0.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
@@ -51,6 +51,7 @@ app.middleware("http")(AuthMiddleware())
 # 全局异常处理
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    logger.error(f"Validation error: {exc.errors()}")
     return JSONResponse(
         status_code=422,
         content={"detail": exc.errors(), "body": exc.body}

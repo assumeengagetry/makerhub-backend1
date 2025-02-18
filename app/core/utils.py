@@ -1,5 +1,3 @@
-# datetime_utils.py
-
 from datetime import datetime, timedelta
 from typing import Optional
 import pytz
@@ -31,3 +29,5 @@ def get_week_start_end(dt: datetime = None) -> tuple[datetime, datetime]:
     start = dt - timedelta(days=dt.weekday())
     end = start + timedelta(days=6)
     return start.replace(hour=0, minute=0, second=0), end.replace(hour=23, minute=59, second=59)
+
+# 这里可以添加其他通用工具函数
