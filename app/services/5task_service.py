@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.task import TaskModel
+from app.core.db import get_database
+from app.models.t5ask_model import TaskModel
 
 class TaskService:
     def __init__(self):

@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.stuff import StuffModel, StuffBorrowModel
+from app.core.db import get_database
+from app.models.s7tuff_model import StuffModel, StuffBorrowModel
 
 class ItemService:
     def __init__(self):

@@ -1,9 +1,9 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.duty_apply import DutyApplyModel
-from app.models.duty_record import DutyRecordModel
+from app.core.db import get_database
+from app.models.d11uty_apply_model import DutyApplyModel
+from app.models.d12uty_model import DutyRecordModel
 
 class DutyService:
     def __init__(self):

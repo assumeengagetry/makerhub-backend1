@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.event import EventModel
+from app.core.db import get_database
+from app.models.e4vent_model import EventModel
 
 class EventService:
     def __init__(self):

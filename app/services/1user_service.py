@@ -1,16 +1,16 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.user import UserModel
+from app.core.db import get_db
+from app.models.u1ser_model import User
 from loguru import logger
 
 class UserService:
     def __init__(self):
-        self.db = get_database()
+        self.db = get_db()
         self.collection = self.db.users
 
-    async def create_user(self, user: UserModel) -> dict:
+    async def create_user(self, user: User) -> dict:
         try:
             user_dict = user.dict(exclude_unset=True)
             user_dict.update({

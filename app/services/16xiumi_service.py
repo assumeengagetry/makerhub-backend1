@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.publicity_link import PublicityLinkModel
+from app.core.db import get_database
+from app.models.x16iumi_model import PublicityLinkModel
 
 class XiumiService:
     def __init__(self):

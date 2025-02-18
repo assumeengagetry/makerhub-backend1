@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.project import ProjectModel
+from app.core.db import get_database
+from app.models.p9roject_model import ProjectModel
 
 class ProjectService:
     def __init__(self):

@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.games import GameModel
+from app.core.db import get_database
+from app.models.c10ompetition_model import GameModel
 
 class CompetitionService:
     def __init__(self):

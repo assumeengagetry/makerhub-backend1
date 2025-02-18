@@ -1,8 +1,8 @@
 from typing import List
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.messages import MessageModel
+from app.core.db import get_database
+from app.models.m15essage_model import MessageModel
 
 class MessageService:
     def __init__(self):

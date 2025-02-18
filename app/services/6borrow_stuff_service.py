@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.stuff_borrow import StuffBorrowModel
+from app.core.db import get_database
+from app.models.b6orrow_stuff_model import StuffBorrowModel
 
 class BorrowService:
     def __init__(self):

@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.printer import PrinterModel
+from app.core.db import get_database
+from app.models.p3rinter_model import PrinterModel
 
 class PrinterService:
     def __init__(self):

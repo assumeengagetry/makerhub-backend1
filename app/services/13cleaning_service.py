@@ -1,8 +1,8 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.database import get_database
-from app.models.clean import CleanModel
+from app.core.db import get_database
+from app.models.c13leaning_model import CleanModel
 
 class CleaningService:
     def __init__(self):

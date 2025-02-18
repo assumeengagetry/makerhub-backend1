@@ -1,14 +1,14 @@
 from typing import List, Optional
 from bson import ObjectId
-from app.models.rules import RuleModel
-from app.database import get_database
+from app.models.r2egulation_model import Regulation
+from app.core.db import get_database
 
 class RegulationService:
     def __init__(self):
         self.db = get_database()
         self.collection = self.db.rules
 
-    async def create_regulation(self, rule: RuleModel) -> dict:
+    async def create_regulation(self, rule: Regulation) -> dict:
         result = await self.collection.insert_one(rule.dict(exclude_unset=True))
         return {"id": str(result.inserted_id)}
 
