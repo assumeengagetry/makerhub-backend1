@@ -1,27 +1,27 @@
 import sys
-from loguru import logger
 from pathlib import Path
+from loguru import logger
 
 def setup_logging():
-    # 移除默认的处理器
+    # 创建日志目录
+    log_path = Path("logs")
+    log_path.mkdir(exist_ok=True)
+
+    # 移除默认处理程序
     logger.remove()
-    
+
     # 添加控制台输出
     logger.add(
         sys.stdout,
-        colorize=True,
-        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
-        level="INFO"
+        format="<green>{time:YYYY-MM-DD HH:mm:ss}</green> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<cyan>{function}</cyan>:<cyan>{line}</cyan> - <level>{message}</level>",
+        level="DEBUG"
     )
-    
-    # 添加文件日志
-    log_path = Path("/var/log/society-manager/app.log")
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    
+
+    # 添加文件输出
     logger.add(
-        str(log_path),
-        rotation="00:00",  # 每天轮换
-        retention="30 days",  # 保留30天
+        "logs/app_{time:YYYY-MM-DD}.log",
+        rotation="00:00",
+        retention="30 days",
         compression="zip",
         level="INFO",
         encoding="utf-8"

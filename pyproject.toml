@@ -1,7 +1,7 @@
 [tool]
 name = "society-management"
 version = "0.1.0"
-description = "基于FastAPI的社团管理系统后端"
+description = "MakerHub"
 authors = ["Your Name <youremail@example.com>"]
 license = "MIT"
 
