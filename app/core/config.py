@@ -1,11 +1,12 @@
-from pydantic import BaseSettings
+import pydantic
 from typing import List
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-class Settings(BaseSettings):
+class Settings(pydantic.ConfigDict):
+    # 项目设置
     PROJECT_NAME: str = "MakerHub"
     API_V1_STR: str = "/api"
     

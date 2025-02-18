@@ -382,3 +382,116 @@ logger.add(
 - 每日检查存储使用情况（MongoDB + MinIO）
 
 根据实际部署环境需要调整配置参数，最新更新请参考代码注释。
+
+
+
+现在的文件树（大改版）
+```
+makerhub-backend1
+├─ app
+│  ├─ core
+│  │  ├─ auth.py
+│  │  ├─ config.py
+│  │  ├─ db.py
+│  │  ├─ logging.py
+│  │  ├─ utils.py
+│  │  └─ __init__.py
+│  ├─ main.py
+│  ├─ models
+│  │  ├─ b6orrow_stuff_model.py
+│  │  ├─ base_model.py
+│  │  ├─ c10ompetition_model.py
+│  │  ├─ c13leaning_model.py
+│  │  ├─ d11uty_apply_model.py
+│  │  ├─ d12uty_model.py
+│  │  ├─ e4vent_model.py
+│  │  ├─ m15essage_model.py
+│  │  ├─ p3rinter_model.py
+│  │  ├─ p9roject_model.py
+│  │  ├─ r17esource.py
+│  │  ├─ r2egulation_model.py
+│  │  ├─ s14chedule_model.py
+│  │  ├─ s7tuff_model.py
+│  │  ├─ t5ask_model.py
+│  │  ├─ u1ser_model.py
+│  │  ├─ v8enue_borrow_model.py
+│  │  └─ x16iumi_model.py
+│  ├─ routes
+│  │  ├─ 10competition_router.py
+│  │  ├─ 11duty_apply_router.py
+│  │  ├─ 12duty_router.py
+│  │  ├─ 13cleaning_router.py
+│  │  ├─ 14schedule_router.py
+│  │  ├─ 15message_router.py
+│  │  ├─ 16xiumi_router.py
+│  │  ├─ 17resource_router.py
+│  │  ├─ 1user_router.py
+│  │  ├─ 2regulation_router.py
+│  │  ├─ 3printer_router.py
+│  │  ├─ 4event_router.py
+│  │  ├─ 5task_router.py
+│  │  ├─ 6borrow_stuff_router.py
+│  │  ├─ 7stuff_router.py
+│  │  ├─ 8venue_router.py
+│  │  └─ 9project_router.py
+│  ├─ schemas
+│  │  ├─ 10competition_schemas.py
+│  │  ├─ 11duty_apply_schemas.py
+│  │  ├─ 12duty_schemas.py
+│  │  ├─ 13cleaning_schemas.py
+│  │  ├─ 14schedule_schemas.py
+│  │  ├─ 15message_schemas.py
+│  │  ├─ 16xiumi_schemas.py
+│  │  ├─ 1user_schemas.py
+│  │  ├─ 2regulation_schemas.py
+│  │  ├─ 3printer_schemas.py
+│  │  ├─ 4event_schemas.py
+│  │  ├─ 5task_schemas.py
+│  │  ├─ 6borrow_stuff_schemas.py
+│  │  ├─ 7stuff_schemas.py
+│  │  ├─ 8venue_borrow_schemas.py
+│  │  └─ 9project_schemas.py
+│  └─ services
+│     ├─ 10competition_service.py
+│     ├─ 12duty_service.py
+│     ├─ 13cleaning_service.py
+│     ├─ 14schedule_service.py
+│     ├─ 15message_service.py
+│     ├─ 16xiumi_service.py
+│     ├─ 1user_service.py
+│     ├─ 2regulation_service.py
+│     ├─ 3printer_service.py
+│     ├─ 4event_service.py
+│     ├─ 5task_service.py
+│     ├─ 6borrow_stuff_service.py
+│     ├─ 7stuff_service.py
+│     ├─ 8venue_borrow_service.py
+│     └─ 9project_service.py
+├─ docker
+│  ├─ minio
+│  └─ mongo
+│     └─ init.js
+├─ docker-compose.yml
+├─ Dockerfile
+├─ nginx
+│  ├─ conf.d
+│  │  └─ society.conf
+│  └─ nginx.conf
+├─ poetry.lock
+├─ pyproject.toml
+├─ README.md
+├─ requirements.txt
+├─ scripts
+│  ├─ backup
+│  │  ├─ minio_backup.sh
+│  │  └─ mongo_backup.sh
+│  └─ maintenance
+│     ├─ cleanup_logs.sh
+│     └─ health_check.py
+└─ tests
+   ├─ conftest.py
+   ├─ integration
+   └─ unit
+      └─ test_members.py
+
+```

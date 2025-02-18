@@ -14,7 +14,7 @@ class StuffCreate(BaseModel):
 
 @router.post("/stuff")
 async def create_stuff(stuff: StuffCreate):
-    new_stuff = await Stuff(**stuff.dict()).save()
+    new_stuff = await Stuff(**stuff.model_dump()).save()
     return {"message": "物资创建成功", "id": str(new_stuff.id)}
 
 @router.get("/stuff/{stuff_id}")

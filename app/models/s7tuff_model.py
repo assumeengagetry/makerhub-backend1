@@ -4,7 +4,7 @@ from mongoengine import Document, StringField, IntField, DateTimeField
 from datetime import datetime
 from .base_model import BaseModel
 
-class Item(BaseModel):
+class Stuff(BaseModel):
     meta = {'collection': 'items'}
     
     stuff_id = StringField(required=True, unique=True)
