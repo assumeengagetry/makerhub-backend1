@@ -5,7 +5,7 @@ from fastapi import HTTPException, Depends, status
 from app.core.config import settings
 from loguru import logger
 import io
-from typing import Generator
+from typing import AsyncGenerator
 
 # MongoDB client
 class MongoDB:
@@ -40,7 +40,7 @@ class MongoDB:
         except Exception as e:
             logger.error(f"创建MongoDB索引失败: {e}")
 
-    async def get_db(self) -> Generator:
+    async def get_db(self) -> AsyncGenerator:
         try:
             yield self.db
         except Exception as e:

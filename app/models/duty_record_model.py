@@ -1,6 +1,6 @@
 # 文件：/society-management/society-management/app/models/duty_record_model.py
 
-from mongoengine import StringField, FloatField, DateTimeField
+from mongoengine import Document, StringField, FloatField, DateTimeField
 from .base_model import BaseModel
 
 class DutyRecord(BaseModel):

@@ -1,6 +1,6 @@
 # 文件：/society-management/society-management/app/models/event_model.py
 
-from mongoengine import StringField, DateTimeField
+from mongoengine import Document, StringField, DateTimeField
 from .base_model import BaseModel
 
 class Event(BaseModel):

@@ -6,8 +6,8 @@ from loguru import logger
 
 from app.core.config import settings
 from app.core.logging import setup_logging
-from app.core.auth_middleware import AuthMiddleware
-from app.utils.mongo_utils import mongo
+from app.core.auth import AuthMiddleware
+from app.core.db import mongo
 from app.routes import (
     user_router,
     schedule_router, 

@@ -1,6 +1,6 @@
 # 文件：/society-management/society-management/app/models/item_model.py
 
-from mongoengine import StringField, IntField, DateTimeField
+from mongoengine import Document, StringField, IntField, DateTimeField
 from datetime import datetime
 from .base_model import BaseModel
 

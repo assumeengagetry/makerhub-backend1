@@ -1,6 +1,6 @@
-from mongoengine import StringField, IntField, DateTimeField
-from .base_model import BaseModel
+from mongoengine import Document, StringField, IntField, DateTimeField
 from datetime import datetime
+from .base_model import BaseModel
 
 class CleaningRecord(BaseModel):
     meta = {'collection': 'cleaning_records'}

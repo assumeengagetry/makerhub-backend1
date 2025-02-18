@@ -1,4 +1,4 @@
-from mongoengine import StringField, IntField, FloatField
+from mongoengine import Document, StringField, IntField, FloatField, DateTimeField
 from .base_model import BaseModel
 
 class PrinterApplication(BaseModel):

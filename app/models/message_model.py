@@ -1,4 +1,4 @@
-from mongoengine import StringField, DateTimeField, IntField
+from mongoengine import Document, StringField, DateTimeField, IntField
 from .base_model import BaseModel
 
 class Message(BaseModel):

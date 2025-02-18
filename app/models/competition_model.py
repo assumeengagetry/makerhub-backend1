@@ -1,4 +1,4 @@
-from mongoengine import StringField, DateTimeField
+from mongoengine import Document, StringField, DateTimeField
 from .base_model import BaseModel
 
 class Competition(BaseModel):

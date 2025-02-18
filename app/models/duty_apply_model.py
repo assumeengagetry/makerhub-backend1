@@ -1,11 +1,11 @@
-from sqlalchemy import Column, String, Integer, Date
+from mongoengine import StringField, IntField, DateTimeField
 from .base_model import BaseModel
 
 class DutyApply(BaseModel):
-    __tablename__ = 'duty_applies'
-
-    apply_id = Column(String(50), unique=True, nullable=False)
-    name = Column(String(50), nullable=False)
-    userid = Column(String(100), nullable=False)
-    day = Column(Date, nullable=False)
-    time_section = Column(Integer, nullable=False)  # 1-6
+    meta = {'collection': 'duty_applies'}
+    
+    apply_id = StringField(required=True, unique=True)
+    name = StringField(required=True)
+    userid = StringField(required=True)
+    day = DateTimeField(required=True)
+    time_section = IntField(required=True)  # 1-6

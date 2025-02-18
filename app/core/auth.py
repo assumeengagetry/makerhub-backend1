@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 import jwt
 from passlib.context import CryptContext
-from fastapi import Request, HTTPException, Depends
+from fastapi import Request, HTTPException, Depends, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorDatabase
