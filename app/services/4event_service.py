@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.e4vent_model import EventModel
+from app.core.db import MongoDB
+from app.models.e4vent_model import Event
 
 class EventService:
     def __init__(self):
-        self.db = get_database()
+        self.db = MongoDB()
         self.collection = self.db.events
 
-    async def create_event(self, event: EventModel) -> dict:
+    async def create_event(self, event: Event) -> dict:
         event_dict = event.dict(exclude_unset=True)
         event_dict["created_at"] = datetime.utcnow()
         event_dict["updated_at"] = datetime.utcnow()

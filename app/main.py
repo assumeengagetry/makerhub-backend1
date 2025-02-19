@@ -80,13 +80,13 @@ app.include_router(u1ser_router.router, prefix=f"{PREFIX}/users", tags=["用户�
 # 工作管理
 app.include_router(s14chedule_router.router, prefix=f"{PREFIX}/schedules", tags=["排班管理"])
 app.include_router(d12uty_router.router, prefix=f"{PREFIX}/duties", tags=["值班管理"])
-app.include_router(d11uty_apply_router.router, prefix=f"{PREFIX}/duty_apply", tags=["值班管理"])
+app.include_router(d11uty_apply_router.router, prefix=f"{PREFIX}/duty_apply", tags=["值班申請管理"])
 app.include_router(c13leaning_router.router, prefix=f"{PREFIX}/cleaning", tags=["清洁管理"])
 app.include_router(t5ask_router.router, prefix=f"{PREFIX}/tasks", tags=["任务管理"])
 
 # 资源管理
 app.include_router(s7tuff_router.router, prefix=f"{PREFIX}/stuff", tags=["物品管理"])
-app.include_router(b6orrow_stuff_router.router, prefix=f"{PREFIX}/borrow_stuff", tags=["借用管理"])
+app.include_router(b6orrow_stuff_router.router, prefix=f"{PREFIX}/borrow_stuff", tags=["借用物品管理"])
 app.include_router(v8enue_router.router, prefix=f"{PREFIX}/venues", tags=["场地管理"])
 app.include_router(p3rinter_router.router, prefix=f"{PREFIX}/printers", tags=["打印管理"])
 app.include_router(r17esource_router.router, prefix=f"{PREFIX}/resources", tags=["MinIO资源"])

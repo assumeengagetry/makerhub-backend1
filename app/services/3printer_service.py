@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.p3rinter_model import PrinterModel
+from app.core.db import MongoDB
+from app.models.p3rinter_model import PrinterApplication
 
 class PrinterService:
     def __init__(self):
-        self.db = get_database()
+        self.db = MongoDB()
         self.collection = self.db.print_requests
 
-    async def create_print_request(self, request: PrinterModel) -> dict:
+    async def create_print_request(self, request: PrinterApplication) -> dict:
         request_dict = request.dict(exclude_unset=True)
         request_dict["created_at"] = datetime.utcnow()
         request_dict["updated_at"] = datetime.utcnow()

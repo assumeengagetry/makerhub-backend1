@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.b6orrow_stuff_model import StuffBorrowModel
+from app.core.db import MongoDB
+from app.models.b6orrow_stuff_model import BorrowRecord
 
 class BorrowService:
     def __init__(self):
-        self.db = get_database()
+        self.db = MongoDB()
         self.collection = self.db.borrows
 
-    async def create_borrow(self, borrow: StuffBorrowModel) -> dict:
+    async def create_borrow(self, borrow: BorrowRecord) -> dict:
         borrow_dict = borrow.dict(exclude_unset=True)
         borrow_dict.update({
             "created_at": datetime.utcnow(),

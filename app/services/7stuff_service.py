@@ -1,16 +1,16 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.s7tuff_model import StuffModel, StuffBorrowModel
+from app.core.db import MongoDB
+from app.models.s7tuff_model import Stuff
 
 class ItemService:
     def __init__(self):
-        self.db = get_database()
+        self.db = MongoDB()
         self.stuff_collection = self.db.stuff
         self.borrow_collection = self.db.stuff_borrow
 
-    async def add_item(self, item: StuffModel) -> dict:
+    async def add_item(self, item: Stuff) -> dict:
         item_dict = item.dict(exclude_unset=True)
         item_dict["created_at"] = datetime.utcnow()
         item_dict["updated_at"] = datetime.utcnow()

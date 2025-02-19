@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.t5ask_model import TaskModel
+from app.core.db import MongoDB
+from app.models.t5ask_model import Task
 
 class TaskService:
     def __init__(self):
-        self.db = get_database()
+        self.db = MongoDB()
         self.collection = self.db.tasks
 
-    async def create_task(self, task: TaskModel) -> dict:
+    async def create_task(self, task: Task) -> dict:
         task_dict = task.dict(exclude_unset=True)
         task_dict.update({
             "created_at": datetime.utcnow(),
