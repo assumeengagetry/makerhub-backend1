@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.s14chedule_model import ArrangeModel
+from app.core.db import mongo
+from app.models.s14chedule_model import Schedule
 
 class ScheduleService:
     def __init__(self):
-        self.db = get_database()
+        self.db = mongo()
         self.collection = self.db.arrangements
 
-    async def create_schedule(self, schedule: ArrangeModel) -> dict:
+    async def create_schedule(self, schedule: Schedule) -> dict:
         schedule_dict = schedule.dict(exclude_unset=True)
         schedule_dict["created_at"] = datetime.utcnow()
         result = await self.collection.insert_one(schedule_dict)

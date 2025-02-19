@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import MongoDB
+from app.core.db import mongo
 from app.models.b6orrow_stuff_model import BorrowRecord
 
 class BorrowService:
     def __init__(self):
-        self.db = MongoDB()
+        self.db = mongo()
         self.collection = self.db.borrows
 
     async def create_borrow(self, borrow: BorrowRecord) -> dict:

@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.p9roject_model import ProjectModel
+from app.core.db import mongo
+from app.models.p9roject_model import Project
 
 class ProjectService:
     def __init__(self):
-        self.db = get_database()
+        self.db = mongo()
         self.collection = self.db.projects
 
-    async def create_project(self, project: ProjectModel) -> dict:
+    async def create_project(self, project: Project) -> dict:
         project_dict = project.dict(exclude_unset=True)
         project_dict["created_at"] = datetime.utcnow()
         project_dict["audit_state"] = 0  # 待审核状态

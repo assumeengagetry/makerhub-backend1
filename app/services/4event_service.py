@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import MongoDB
+from app.core.db import mongo
 from app.models.e4vent_model import Event
 
 class EventService:
     def __init__(self):
-        self.db = MongoDB()
+        self.db = mongo()
         self.collection = self.db.events
 
     async def create_event(self, event: Event) -> dict:

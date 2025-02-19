@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import MongoDB
+from app.core.db import mongo
 from app.models.t5ask_model import Task
 
 class TaskService:
     def __init__(self):
-        self.db = MongoDB()
+        self.db = mongo()
         self.collection = self.db.tasks
 
     async def create_task(self, task: Task) -> dict:

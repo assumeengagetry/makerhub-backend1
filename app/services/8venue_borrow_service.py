@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.v8enue_borrow_model import SiteBorrowModel
+from app.core.db import mongo
+from app.models.v8enue_borrow_model import VenueBorrow
 
 class VenueService:
     def __init__(self):
-        self.db = get_database()
+        self.db = mongo()
         self.collection = self.db.site_borrows
 
-    async def create_venue_request(self, request: SiteBorrowModel) -> dict:
+    async def create_venue_request(self, request: VenueBorrow) -> dict:
         request_dict = request.dict(exclude_unset=True)
         request_dict.update({
             "created_at": datetime.utcnow(),

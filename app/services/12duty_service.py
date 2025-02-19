@@ -1,23 +1,23 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.d11uty_apply_model import DutyApplyModel
-from app.models.d12uty_model import DutyRecordModel
+from app.core.db import mongo
+from app.models.d11uty_apply_model import DutyApply
+from app.models.d12uty_model import DutyRecord
 
 class DutyService:
     def __init__(self):
-        self.db = get_database()
+        self.db = mongo()
         self.apply_collection = self.db.duty_applies
         self.record_collection = self.db.duty_records
 
-    async def create_duty_apply(self, apply: DutyApplyModel) -> dict:
+    async def create_duty_apply(self, apply: DutyApply) -> dict:
         apply_dict = apply.dict(exclude_unset=True)
         apply_dict["created_at"] = datetime.utcnow()
         result = await self.apply_collection.insert_one(apply_dict)
         return {"id": str(result.inserted_id)}
 
-    async def create_duty_record(self, record: DutyRecordModel) -> dict:
+    async def create_duty_record(self, record: DutyRecord) -> dict:
         record_dict = record.dict(exclude_unset=True)
         record_dict["created_at"] = datetime.utcnow()
         result = await self.record_collection.insert_one(record_dict)

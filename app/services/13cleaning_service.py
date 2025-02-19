@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.c13leaning_model import CleanModel
+from app.core.db import mongo
+from app.models.c13leaning_model import CleaningRecord
 
 class CleaningService:
     def __init__(self):
-        self.db = get_database()
+        self.db = mongo()
         self.collection = self.db.cleaning_records
 
-    async def create_cleaning_record(self, record: CleanModel) -> dict:
+    async def create_cleaning_record(self, record: CleaningRecord) -> dict:
         record_dict = record.dict(exclude_unset=True)
         record_dict["created_at"] = datetime.utcnow()
         record_dict["updated_at"] = datetime.utcnow()

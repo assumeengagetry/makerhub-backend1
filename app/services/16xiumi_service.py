@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.x16iumi_model import PublicityLinkModel
+from app.core.db import mongo
+from app.models.x16iumi_model import XiumiLink
 
 class XiumiService:
     def __init__(self):
-        self.db = get_database()
+        self.db = mongo()
         self.collection = self.db.publicity_links
 
-    async def create_link(self, link: PublicityLinkModel) -> dict:
+    async def create_link(self, link: XiumiLink) -> dict:
         link_dict = link.dict(exclude_unset=True)
         link_dict["created_at"] = datetime.utcnow()
         result = await self.collection.insert_one(link_dict)

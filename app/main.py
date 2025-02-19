@@ -7,7 +7,7 @@ from loguru import logger
 from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.auth import AuthMiddleware
-from app.core.db import mongo
+from app.core.db import MongoDB
 from app.routes import (
     u1ser_router,
     s14chedule_router, 

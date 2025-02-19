@@ -1,11 +1,11 @@
 from typing import List, Optional
 from bson import ObjectId
 from app.models.r2egulation_model import Regulation
-from app.core.db import MongoDB
+from app.core.db import mongo
 
 class RegulationService:
     def __init__(self):
-        self.db = MongoDB()
+        self.db = mongo()
         self.collection = self.db.rules
 
     async def create_regulation(self, rule: Regulation) -> dict:

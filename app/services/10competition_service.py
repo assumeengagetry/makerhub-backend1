@@ -1,15 +1,15 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import get_database
-from app.models.c10ompetition_model import GameModel
+from app.core.db import mongo
+from app.models.c10ompetition_model import Competition
 
 class CompetitionService:
     def __init__(self):
-        self.db = get_database()
+        self.db = mongo()
         self.collection = self.db.games
 
-    async def create_competition(self, game: GameModel) -> dict:
+    async def create_competition(self, game: Competition) -> dict:
         game_dict = game.dict(exclude_unset=True)
         game_dict["created_at"] = datetime.utcnow()
         result = await self.collection.insert_one(game_dict)

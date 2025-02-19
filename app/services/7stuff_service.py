@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import MongoDB
+from app.core.db import mongo
 from app.models.s7tuff_model import Stuff
 
 class ItemService:
     def __init__(self):
-        self.db = MongoDB()
+        self.db = mongo()
         self.stuff_collection = self.db.stuff
         self.borrow_collection = self.db.stuff_borrow
 

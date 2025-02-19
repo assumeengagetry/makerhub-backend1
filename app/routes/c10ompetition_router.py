@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.c10ompetition_model import Game
+from app.models.c10ompetition_model import Competition
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -19,10 +19,10 @@ class CompetitionCreate(BaseModel):
 
 @router.post("/competition")
 async def create_competition(competition: CompetitionCreate):
-    new_competition = await Game(**competition.dict()).save()
+    new_competition = await Competition(**competition.dict()).save()
     return {"message": "比赛创建成功", "id": str(new_competition.id)}
 
 @router.get("/competitions")
 async def get_competitions():
-    competitions = await Game.objects().all()
+    competitions = await Competition.objects().all()
     return [comp.dict() for comp in competitions]
