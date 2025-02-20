@@ -3,6 +3,7 @@ from datetime import datetime
 from bson import ObjectId
 from app.core.db import mongo
 from app.models.s7tuff_model import Stuff
+from app.models.b6orrow_stuff_model import BorrowRecord
 
 class ItemService:
     def __init__(self):
@@ -17,7 +18,7 @@ class ItemService:
         result = await self.stuff_collection.insert_one(item_dict)
         return {"id": str(result.inserted_id)}
 
-    async def create_borrow_request(self, request: StuffBorrowModel) -> dict:
+    async def create_borrow_request(self, request: BorrowRecord) -> dict:
         request_dict = request.dict(exclude_unset=True)
         request_dict["created_at"] = datetime.utcnow()
         request_dict["state"] = 0  # 未审核状态

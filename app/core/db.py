@@ -12,7 +12,7 @@ from typing import AsyncGenerator
 
 # MongoDB client
 class MongoDB:
-    client: AsyncIOMotorClient = None
+    client: AsyncIOMotorClient = None # type: ignore
     db = None
 
     async def connect_to_database(self):
