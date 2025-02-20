@@ -4,6 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from app.main import app
 from app.core.config import settings
 from app.core.db import mongo
+import sys
 import os
 
 @pytest.fixture(scope="module")
