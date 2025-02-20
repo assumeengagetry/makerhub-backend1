@@ -488,10 +488,19 @@ makerhub-backend1
 │  └─ maintenance
 │     ├─ cleanup_logs.sh
 │     └─ health_check.py
-└─ tests
+tests
    ├─ conftest.py
-   ├─ integration
-   └─ unit
+   ├─ integration/
++  │  ├─ test_auth.py
++  │  ├─ test_file_upload.py
++  │  └─ test_user_flow.py
+   └─ unit/
++     ├─ services/
++     │  ├─ test_user_service.py
++     │  └─ test_stuff_service.py
++     ├─ models/
++     │  ├─ test_user_model.py
++     │  └─ test_borrow_model.py
       └─ test_members.py
 
 ```
