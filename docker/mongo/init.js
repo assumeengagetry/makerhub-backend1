@@ -61,7 +61,7 @@ db.stuff_borrow.createIndex({ "userid": 1 });
 // 创建管理员用户
 db.users.insertOne({
     userid: "xsk13969662263@outlook.com",
-    password: "_assume060801Xsk_", // "admin123"的哈希值
+    password: "_assume060801Xsk_", // 
     level: 3,
     real_name: "管理员",
     phone_num: "15192018057",
