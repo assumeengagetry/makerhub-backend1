@@ -12,7 +12,7 @@ class MessageCreate(BaseModel):
 
 @router.post("/message")
 async def send_message(message: MessageCreate):
-    new_message = await Message(
+    new_message =  Message(
         **message.dict(),
         sent_at=datetime.now(),
         status="unread"
@@ -21,5 +21,5 @@ async def send_message(message: MessageCreate):
 
 @router.get("/messages/{user_id}")
 async def get_user_messages(user_id: str):
-    messages = await Message.objects(receiver_id=user_id).all()
+    messages =  Message.objects(receiver_id=user_id).all()
     return [msg.dict() for msg in messages]

@@ -23,19 +23,19 @@ class BorrowRequest(BaseModel):
 
 @router.post("/borrow")
 async def create_borrow_request(request: BorrowRequest):
-    new_request = await BorrowRecord(**request.dict(), state=0).save()
+    new_request = BorrowRecord(**request.dict(), state=0).save()
     return {"message": "借用申请创建成功", "id": str(new_request.id)}
 
 @router.put("/borrow/{sb_id}")
 async def update_borrow_status(sb_id: str, state: int):
-    borrow = await BorrowRecord.objects(sb_id=sb_id).first()
+    borrow = BorrowRecord.objects(sb_id=sb_id).first()
     if not borrow:
         raise HTTPException(status_code=404, detail="借用申请不存在")
     borrow.state = state
-    await borrow.save()
+    borrow.save()
     return {"message": "借用申请状态更新成功"}
 
 @router.get("/borrows/{userid}")
 async def get_user_borrows(userid: str):
-    borrows = await BorrowRecord.objects(userid=userid).all()
+    borrows = BorrowRecord.objects(userid=userid).all()
     return [borrow.dict() for borrow in borrows]

@@ -11,18 +11,18 @@ class XiumiLinkCreate(BaseModel):
 
 @router.post("/xiumi-link")
 async def create_xiumi_link(link: XiumiLinkCreate):
-    new_link = await XiumiLink(**link.dict()).save()
+    new_link = XiumiLink(**link.dict()).save()
     return {"message": "宣传链接创建成功", "id": str(new_link.id)}
 
 @router.get("/xiumi-links")
 async def get_xiumi_links():
-    links = await XiumiLink.objects().all()
+    links = XiumiLink.objects().all()
     return [link.dict() for link in links]
 
 @router.delete("/xiumi-link/{link_id}")
 async def delete_xiumi_link(link_id: str):
-    link = await XiumiLink.objects(id=link_id).first()
+    link = XiumiLink.objects(id=link_id).first()
     if not link:
         raise HTTPException(status_code=404, detail="宣传链接不存在")
-    await link.delete()
+    link.delete()
     return {"message": "宣传链接删除成功"}

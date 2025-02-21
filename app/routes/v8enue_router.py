@@ -20,15 +20,15 @@ class VenueRequest(BaseModel):
 
 @router.post("/venue")
 async def create_venue_request(request: VenueRequest):
-    new_request = await VenueBorrow(**request.dict()).save()
+    new_request =    VenueBorrow(**request.dict()).save()
     return {"message": "场地申请创建成功", "id": str(new_request.id)}
 
 @router.put("/venue/{apply_id}")
 async def update_venue_status(apply_id: str, state: int, reason: str = None):
-    venue = await VenueBorrow.objects(apply_id=apply_id).first()
+    venue =  VenueBorrow.objects(apply_id=apply_id).first()
     if not venue:
         raise HTTPException(status_code=404, detail="场地申请不存在")
     venue.state = state
     venue.reason = reason
-    await venue.save()
+    venue.save()
     return {"message": "场地申请状态更新成功"}

@@ -17,11 +17,11 @@ class UserCreate(BaseModel):
 
 @router.post("/register")
 async def register(user: UserCreate):
-    if await User.objects(userid=user.userid).first():
+    if  User.objects(userid=user.userid).first():
         raise HTTPException(status_code=400, detail="用户已存在")
     
     hashed_password = bcrypt.hash(user.password)
-    new_user = await User(
+    new_user =  User(
         userid=user.userid,
         password=hashed_password,
         real_name=user.real_name,
@@ -32,7 +32,7 @@ async def register(user: UserCreate):
 
 @router.post("/login")
 async def login(userid: str, password: str):
-    user = await User.objects(userid=userid).first()
+    user =  User.objects(userid=userid).first()
     if not user or not bcrypt.verify(password, user.password):
         raise HTTPException(status_code=401, detail="用户名或密码错误")
     

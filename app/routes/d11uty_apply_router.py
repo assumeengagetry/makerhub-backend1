@@ -14,5 +14,5 @@ class DutyRequest(BaseModel):
 
 @router.post("/duty/apply")
 async def create_duty_request(request: DutyRequest):
-    new_request = await DutyApply(**request.dict()).save()
+    new_request =  DutyApply(**request.dict()).save()
     return {"message": "值班申请创建成功", "id": str(new_request.id)}

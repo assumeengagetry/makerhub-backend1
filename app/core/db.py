@@ -1,51 +1,45 @@
-# 这个dp.py我还没弄明白，先放着，主要是有个get_dp的对象调用不到，就是这个init都调不到，不知道为什么
-
-
-from motor.motor_asyncio import AsyncIOMotorClient
+import mongoengine as me
 from minio import Minio
 from minio.error import S3Error
+from mongoengine import connect, Document, StringField, IntField, BinaryField
 from fastapi import HTTPException, Depends, status
 from app.core.config import settings
 from loguru import logger
 import io
-from typing import AsyncGenerator
+from typing import Generator
 
 # MongoDB client
 class MongoDB:
-    client: AsyncIOMotorClient = None # type: ignore
-    db = None
-
-    async def connect_to_database(self):
+    def connect_to_database(self):
         try:
             logger.info("正在连接到MongoDB...")
-            self.client = AsyncIOMotorClient(settings.MONGO_URI)
-            self.db = self.client[settings.MONGO_DB]
+            me.connect(host=settings.MONGO_URI, db=settings.MONGO_DB)
             logger.info("MongoDB连接成功")
         except Exception as e:
             logger.error(f"连接MongoDB失败: {e}")
 
-    async def close_database_connection(self):
+    def close_database_connection(self):
         try:
             logger.info("正在关闭MongoDB连接...")
-            if self.client:
-                self.client.close()
-                logger.info("MongoDB连接已关闭")
+            me.disconnect()  # 使用 MongoEngine 的 disconnect 来关闭连接
+            logger.info("MongoDB连接已关闭")
         except Exception as e:
             logger.error(f"关闭MongoDB连接失败: {e}")
 
-    async def create_indexes(self):
+    def create_indexes(self):
         try:
             logger.info("正在创建MongoDB索引...")
-            await self.db.users.create_index("userid", unique=True)
-            await self.db.duty_records.create_index("userid")
-            await self.db.borrow_records.create_index("apply_id", unique=True)
+            # 使用 MongoEngine 的同步方法创建索引
+            me.connection.get_database().users.create_index("userid", unique=True)
+            me.connection.get_database().duty_records.create_index("userid")
+            me.connection.get_database().borrow_records.create_index("apply_id", unique=True)
             logger.info("MongoDB索引创建完成")
         except Exception as e:
             logger.error(f"创建MongoDB索引失败: {e}")
 
-    async def get_db(self) -> AsyncGenerator:
+    def get_db(self) -> Generator:
         try:
-            yield self.db
+            yield me.connection.get_database()  # 通过 MongoEngine 获取数据库
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -53,7 +47,10 @@ class MongoDB:
             )
 
     def get_collection(self, collection_name: str):
-        async def get_collection_dependency(db = Depends(self.get_db)):
+        # 同样的方式来获取集合
+        # 不需要使用 Depends，直接调用 get_db 方法
+        def get_collection_dependency():
+            db = next(self.get_db())  # 获取数据库连接
             return db[collection_name]
         return get_collection_dependency
 

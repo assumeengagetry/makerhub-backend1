@@ -7,7 +7,7 @@ router = APIRouter()
 @router.post("/duty/record")
 async def create_duty_record(userid: str, name: str, start_time: datetime, end_time: datetime):
     total_hours = (end_time - start_time).total_seconds() / 3600
-    new_record = await DutyRecord(
+    new_record =  DutyRecord(
         userid=userid,
         name=name,
         start_time=start_time,

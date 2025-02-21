@@ -14,22 +14,22 @@ class StuffCreate(BaseModel):
 
 @router.post("/stuff")
 async def create_stuff(stuff: StuffCreate):
-    new_stuff = await Stuff(**stuff.model_dump()).save()
+    new_stuff = Stuff(**stuff.model_dump()).save()
     return {"message": "物资创建成功", "id": str(new_stuff.id)}
 
 @router.get("/stuff/{stuff_id}")
 async def get_stuff(stuff_id: str):
-    stuff = await Stuff.objects(stuff_id=stuff_id).first()
+    stuff = Stuff.objects(stuff_id=stuff_id).first()
     if not stuff:
         raise HTTPException(status_code=404, detail="物资不存在")
     return stuff.dict()
 
 @router.put("/stuff/{stuff_id}")
 async def update_stuff(stuff_id: str, number: int):
-    stuff = await Stuff.objects(stuff_id=stuff_id).first()
+    stuff = Stuff.objects(stuff_id=stuff_id).first()
     if not stuff:
         raise HTTPException(status_code=404, detail="物资不存在")
     
     stuff.number = number
-    await stuff.save()
+    stuff.save()
     return {"message": "物资信息更新成功"}

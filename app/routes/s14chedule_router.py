@@ -11,7 +11,7 @@ class ScheduleCreate(BaseModel):
 
 @router.post("/schedule")
 async def create_schedule(schedule: ScheduleCreate):
-    new_schedule = await Schedule(**schedule.dict()).save()
+    new_schedule =  Schedule(**schedule.dict()).save()
     return {"message": "排班创建成功", "id": str(new_schedule.id)}
 
 @router.get("/schedules")
@@ -19,5 +19,5 @@ async def get_schedules(type: str = None):
     query = {}
     if type:
         query["type"] = type
-    schedules = await Schedule.objects(**query).all()
+    schedules =  Schedule.objects(**query).all()
     return [schedule.dict() for schedule in schedules]
