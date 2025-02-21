@@ -60,13 +60,13 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 # 数据库连接管理
-@app.lifespan("startup")
+@app.on_event("startup")
 async def startup_event():
     setup_logging()
     await mongo.connect_to_database()
     logger.info("应用启动 - 已连接到MongoDB")
 
-@app.lifespan("shutdown")
+@app.on_event("shutdown")
 async def shutdown_event():
     await mongo.close_database_connection()
     logger.info("应用关闭 - 已断开MongoDB连接")

@@ -6,6 +6,8 @@ from app.core.config import settings
 from app.core.db import mongo
 import sys
 import os
+print(sys.path)  # 打印当前的模块搜索路径
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 @pytest.fixture(scope="module")
 def test_db():

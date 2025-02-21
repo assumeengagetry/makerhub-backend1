@@ -14,5 +14,5 @@ class User(BaseModel):
 
     meta = {
         'collection': 'users',
-        'indexes': ['userid', 'phone_num','real_name','email'] # 字段创建索引
+        'indexes': ['userid', 'phone_num','real_name'] # 字段创建索引
     }

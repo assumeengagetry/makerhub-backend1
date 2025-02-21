@@ -1,6 +1,8 @@
 # tests/unit/services/test_file_service.py
 from unittest.mock import Mock
 from app.services.x16iumi_service import XiumiService
+import pytest
+from app.core.config import settings
 
 @pytest.fixture
 def mock_minio():

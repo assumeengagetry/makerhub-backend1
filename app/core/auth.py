@@ -8,6 +8,7 @@ from fastapi.responses import JSONResponse
 from motor.motor_asyncio import AsyncIOMotorDatabase
 from app.core.config import settings
 from app.core.db import mongo
+from loguru import logger
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -77,6 +78,8 @@ async def get_current_user(
 
 class AuthMiddleware:
     async def __call__(self, request: Request, call_next):
+        logger.info(f"Request path: {request.url.path}")
+        
         if request.url.path in ["/api/v1/auth/login", "/docs", "/redoc", "/openapi.json"]:
             response = await call_next(request)
             return response

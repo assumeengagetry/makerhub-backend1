@@ -1,6 +1,12 @@
+from fastapi.testclient import TestClient
+from app.main import app    
+from app.core.db import mongo
+from app.models.b6orrow_stuff_model import BorrowRecord
+
+
 def test_borrow_request_flow():
     # 模拟用户创建借用请求
-    response_create = client.post("/api/v1/borrow_stuff/borrow", json={
+    response_create = BorrowRecord.post("/api/v1/borrow_stuff/borrow", json={
         "sb_id": "12345",
         "userid": "user_001",
         "name": "John Doe",
@@ -19,7 +25,7 @@ def test_borrow_request_flow():
     borrow_id = response_create.json()["id"]
 
     # 模拟管理员更新借用请求状态
-    response_update = client.put(f"/api/v1/borrow_stuff/borrow/{borrow_id}", json={"state": 1})
+    response_update = .put(f"/api/v1/borrow_stuff/borrow/{borrow_id}", json={"state": 1})
     assert response_update.status_code == 200
     assert response_update.json() == {"message": "借用申请状态更新成功"}
     

@@ -68,6 +68,15 @@ class MinioClient:
         )
         self._ensure_bucket_exists()
 
+    def _ensure_bucket_exists(self):
+        # 检查桶是否存在，不存在则创建
+        if not self.client.bucket_exists(settings.MINIO_BUCKET):
+            self.client.make_bucket(settings.MINIO_BUCKET)
+            logger.info(f"Bucket '{settings.MINIO_BUCKET}' 创建成功")
+        else:
+            logger.info(f"Bucket '{settings.MINIO_BUCKET}' 已存在")
+        
+
     
     def get_file(self, filename: str) -> tuple[bytes, str]:
         try:
