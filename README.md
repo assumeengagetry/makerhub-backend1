@@ -41,8 +41,6 @@ makerhub-backend1
 |
 ├─ docker/       # Docker 配置
 ├─ nginx/        # Nginx 配置
-├─ scripts/      # 运维脚本
-└─ tests/        # 测试代码
 ```
 
 ## 快速开始
