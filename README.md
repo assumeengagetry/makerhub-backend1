@@ -116,43 +116,6 @@ server {
 }
 ```
 
-## 开发指南
-
-- 使用 **Black** 进行代码格式化
-- 使用 **isort** 进行 import 排序
-- 提交前运行 **pre-commit** 检查：
-
-```bash
-pre-commit install
-```
-
-## 备份与恢复
-
-### MongoDB 备份
-
-```bash
-# 备份
-docker exec mongo sh -c 'mongodump --db society_db --archive' > backup.dump
-
-# 恢复
-docker exec -i mongo sh -c 'mongorestore --archive' < backup.dump
-```
-
-### MinIO 备份
-
-```bash
-aws s3 sync s3://society-files ./minio-backup --endpoint-url http://localhost:9000
-```
-
-## 日志管理
-
-日志按天滚动保存，路径：`/var/log/society-manager/`
-
-```python
-from loguru import logger
-
-logger.add("/var/log/society-manager/app.log", rotation="00:00", retention="30 days", compression="zip")
-```
 
 ## 贡献指南
 

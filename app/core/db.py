@@ -9,14 +9,36 @@ import io
 from typing import Generator
 
 # MongoDB client
+# 这地方还有一堆索引没写，我先写一个示例，后面的再说
 class MongoDB:
     def connect_to_database(self):
         try:
             logger.info("正在连接到MongoDB...")
-            me.connect(host=settings.MONGO_URI, db=settings.MONGO_DB)  # 连接到MongoDB
+            # 使用connect()函数连接到MongoDB
+            self.connection = connect(
+                db=settings.MONGO_DB,
+                host=settings.MONGO_URI
+            )
+            self.db = self.connection.get_database(settings.MONGO_DB)
             logger.info("MongoDB连接成功")
+            
+            # 确保必要的集合存在并创建索引
+            self._ensure_collections()
+            self.create_indexes()
+            
         except Exception as e:
             logger.error(f"连接MongoDB失败: {e}")
+            raise e
+
+    def _ensure_collections(self):
+        """确保所有必要的集合存在"""
+        required_collections = ['users', 'duty_records', 'borrow_records']
+        existing_collections = self.db.list_collection_names()
+        
+        for collection in required_collections:
+            if collection not in existing_collections:
+                logger.info(f"创建集合: {collection}")
+                self.db.create_collection(collection)
 
     def close_database_connection(self):
         try:
@@ -29,17 +51,27 @@ class MongoDB:
     def create_indexes(self):
         try:
             logger.info("正在创建MongoDB索引...")
-            # 使用 MongoEngine 的同步方法创建索引
-            me.connection.get_database().users.create_index("userid", unique=True)
-            me.connection.get_database().duty_records.create_index("userid")
-            me.connection.get_database().borrow_records.create_index("apply_id", unique=True)
-            logger.info("MongoDB索引创建完成")
+           
+            # 为users集合创建索引
+            self.db.users.create_index("userid", unique=True)
+            logger.info("users集合索引创建成功")
+            
+            # 为duty_records集合创建索引
+            self.db.duty_records.create_index("userid")
+            logger.info("duty_records集合索引创建成功")
+            
+            # 为borrow_records集合创建索引
+            self.db.borrow_records.create_index("apply_id", unique=True)
+            logger.info("borrow_records集合索引创建成功")
+            
+            logger.info("所有MongoDB索引创建完成")
         except Exception as e:
             logger.error(f"创建MongoDB索引失败: {e}")
+            raise e
 
     def get_db(self) -> Generator:
         try:
-            yield me.connection.get_database()  # 通过 MongoEngine 获取数据库
+            yield me.connection.get_db()  # 通过 MongoEngine 获取数据库
         except Exception as e:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

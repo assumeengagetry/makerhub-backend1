@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from loguru import logger
 from app.services.u1ser_service import UserService
 from app.core.config import settings
 import aiohttp
