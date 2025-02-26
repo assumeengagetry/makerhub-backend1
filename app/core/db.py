@@ -8,18 +8,19 @@ from loguru import logger
 import io
 from typing import Generator
 
-# MongoDB client
-# 这地方还有一堆索引没写，我先写一个示例，后面的再说
 class MongoDB:
+    def __init__(self):
+        self.connection = None
+        self.db = None
+
     def connect_to_database(self):
         try:
             logger.info("正在连接到MongoDB...")
-            # 使用connect()函数连接到MongoDB
             self.connection = connect(
                 db=settings.MONGO_DB,
                 host=settings.MONGO_URI
             )
-            self.db = self.connection.get_database(settings.MONGO_DB)
+            self.db = self.connection[settings.MONGO_DB]
             logger.info("MongoDB连接成功")
             
             # 确保必要的集合存在并创建索引
@@ -78,13 +79,13 @@ class MongoDB:
                 detail=str(e)
             )
 
+    def get_database(self):
+        if not self.db:
+            self.connect_to_database()
+        return self.db
+
     def get_collection(self, collection_name: str):
-        # 同样的方式来获取集合
-        # 不需要使用 Depends，直接调用 get_db 方法
-        def get_collection_dependency():
-            db = next(self.get_db())  # 获取数据库连接
-            return db[collection_name]
-        return get_collection_dependency
+        return self.get_database()[collection_name]
 
 # MinIO client
 class MinioClient:
@@ -115,5 +116,5 @@ class MinioClient:
             raise HTTPException(status_code=404, detail=f"File not found: {str(e)}")
 
 # Initialize clients
-mongo = MongoDB()
+mongodb = MongoDB()
 minio_client = MinioClient()

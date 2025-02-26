@@ -7,7 +7,7 @@ from loguru import logger
 from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.auth import AuthMiddleware
-from app.core.db import mongo
+from app.core.db import mongodb
 from app.routes import (
     u1ser_router,
     s14chedule_router, 
@@ -62,12 +62,12 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 @app.on_event("startup")
 async def startup_event():
     setup_logging()
-    mongo.connect_to_database()  # 使用 MongoEngine 连接数据库
+    mongodb.connect_to_database()
     logger.info("应用启动 - 已连接到MongoDB")
 
 @app.on_event("shutdown")
 async def shutdown_event():
-    mongo.close_database_connection()  # 使用 MongoEngine 断开连接
+    mongodb.close_database_connection()
     logger.info("应用关闭 - 已断开MongoDB连接")
 
 # API路由注册

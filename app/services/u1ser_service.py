@@ -1,13 +1,12 @@
 from typing import Optional
 from datetime import datetime
-from app.core.db import mongo
+from app.core.db import mongodb
 from app.core.auth import create_access_token
 from loguru import logger
 
 class UserService:
     def __init__(self):
-        self.db = mongo()
-        self.collection = self.db.users
+        self.collection = mongodb.get_collection("users")
 
     async def create_or_update_wx_user(self, openid: str, user_info: dict) -> dict:
         try:

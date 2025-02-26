@@ -7,7 +7,8 @@ from fastapi.exceptions import RequestValidationError
 from loguru import logger
 from app.core.logging import setup_logging
 from app.core.auth import AuthMiddleware
-from app.core.db import mongo
+from app.core.db import mongodb
+from fastapi import FastAPI, Request
 from app.routes import (
     u1ser_router,
     s14chedule_router, 
