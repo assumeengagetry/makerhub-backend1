@@ -1,46 +1,48 @@
-# filepath: /society-management/society-management/app/routes/user_router.py
-
 from fastapi import APIRouter, HTTPException
-from app.models.u1ser_model import User
+from app.services.u1ser_service import UserService
+from app.core.config import settings
+import aiohttp
 from typing import Optional
 from pydantic import BaseModel
-from passlib.hash import bcrypt
 
 router = APIRouter()
+user_service = UserService()
 
-class UserCreate(BaseModel):
-    userid: str
-    password: str
-    real_name: str
-    phone_num: str
-    level: Optional[int] = 1
+class WxLoginRequest(BaseModel):
+    code: str
+    user_info: Optional[dict] = None
 
-@router.post("/register")
-async def register(user: UserCreate):
-    if  User.objects(userid=user.userid).first():
-        raise HTTPException(status_code=400, detail="用户已存在")
-    
-    hashed_password = bcrypt.hash(user.password)
-    new_user =  User(
-        userid=user.userid,
-        password=hashed_password,
-        real_name=user.real_name,
-        phone_num=user.phone_num,
-        level=user.level
-    ).save()
-    return {"message": "注册成功", "id": str(new_user.id)}
-
-@router.post("/login")
-async def login(userid: str, password: str):
-    user =  User.objects(userid=userid).first()
-    if not user or not bcrypt.verify(password, user.password):
-        raise HTTPException(status_code=401, detail="用户名或密码错误")
-    
-    return {
-        "message": "登录成功",
-        "user": {
-            "userid": user.userid,
-            "real_name": user.real_name,
-            "level": user.level
-        }
-    }
+@router.post("/wx-login")
+async def wx_login(request: WxLoginRequest):
+    try:
+        async with aiohttp.ClientSession() as session:
+            # 请求微信接口获取openid
+            async with session.get(
+                settings.WECHAT_LOGIN_URL,
+                params={
+                    'appid': settings.WECHAT_APPID,
+                    'secret': settings.WECHAT_SECRET,
+                    'js_code': request.code,
+                    'grant_type': 'authorization_code'
+                }
+            ) as response:
+                wx_response = await response.json()
+                
+                if 'errcode' in wx_response:
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"微信登录失败: {wx_response['errmsg']}"
+                    )
+                
+                openid = wx_response['openid']
+                
+                # 处理用户信息
+                result = await user_service.create_or_update_wx_user(
+                    openid,
+                    request.user_info or {}
+                )
+                return result
+                
+    except Exception as e:
+        logger.error(f"微信登录处理失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="登录处理失败")

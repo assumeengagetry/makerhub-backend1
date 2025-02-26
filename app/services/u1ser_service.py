@@ -1,8 +1,7 @@
-from typing import List, Optional
+from typing import Optional
 from datetime import datetime
-from bson import ObjectId
 from app.core.db import mongo
-from app.models.u1ser_model import User
+from app.core.auth import create_access_token
 from loguru import logger
 
 class UserService:
@@ -10,23 +9,37 @@ class UserService:
         self.db = mongo()
         self.collection = self.db.users
 
-    async def create_user(self, user: User) -> dict:    # 這地方一定要確保使用的是支持 async 操作的 mongo 驅動（如 motor）。如果沒有使用 motor，操作將不會是異步的。
+    async def create_or_update_wx_user(self, openid: str, user_info: dict) -> dict:
         try:
-            user_dict = user.dict(exclude_unset=True)
-            user_dict.update({
-                "created_at": datetime.utcnow(),
-                "state": 1,  # 正常状态
-                "score": 0   # 初始积分
-            })
-            result = await self.collection.insert_one(user_dict)
-            logger.info(f"用户创建成功: {user.userid}")
-            return {"id": str(result.inserted_id)}
+            user = await self.collection.find_one({"userid": openid})
+            if user:
+                # 更新用户信息
+                await self.collection.update_one(
+                    {"userid": openid},
+                    {"$set": user_info}
+                )
+            else:
+                # 创建新用户
+                user_info["userid"] = openid
+                user_info.update({
+                    "created_at": datetime.utcnow(),
+                    "state": 1,
+                    "score": 0,
+                    "level": 1
+                })
+                await self.collection.insert_one(user_info)
+
+            token = create_access_token(openid)
+            return {
+                "token": token,
+                "user_info": await self.get_user(openid)
+            }
         except Exception as e:
-            logger.error(f"用户创建失败: {e}")
+            logger.error(f"微信用户处理失败: {e}")
             raise e
 
-    async def get_user(self, user_id: str) -> Optional[dict]:
-        return await self.collection.find_one({"userid": user_id})
+    async def get_user(self, openid: str) -> Optional[dict]:
+        return await self.collection.find_one({"userid": openid})
 
     async def update_user_score(self, user_id: str, score_change: int) -> bool:
         result = await self.collection.update_one(

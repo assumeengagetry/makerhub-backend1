@@ -2,9 +2,8 @@ from mongoengine import StringField, IntField, BinaryField
 from .base_model import BaseModel
 
 class User(BaseModel):
-    userid = StringField(required=True, unique=True)  # 邮箱作为用户ID
-    password = StringField(required=True)
-    level = IntField(default=1)  # 1：编外人员，2：干事，3：部长及以上
+    userid = StringField(required=True, unique=True)  # 使用微信openid作为用户ID
+    level = IntField(default=1)  # 1：普通用户，2：干事，3：部长及以上
     real_name = StringField(required=True)
     phone_num = StringField()
     note = StringField()
@@ -14,5 +13,5 @@ class User(BaseModel):
 
     meta = {
         'collection': 'users',
-        'indexes': ['userid', 'phone_num','real_name'] # 字段创建索引
+        'indexes': ['userid', 'phone_num', 'real_name']
     }

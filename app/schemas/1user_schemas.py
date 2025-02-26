@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel, Field, EmailStr
 
 class UserBase(BaseModel):
-    userid: EmailStr  # 用户邮箱
+    userid: str  # openid
     level: int = 1  # 1：會員，2：干事，3：部长及以上
     real_name: str
     phone_num: str

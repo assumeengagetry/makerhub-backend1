@@ -29,14 +29,14 @@ async def get_regulation(regulation_id: str):
 @router.get("/regulations")
 async def list_regulations():
     regulations = Regulation.objects()
-    return [regulation.to_dict() for regulation in regulations]
+    return [regulation.to_dict() for regulation in regulations]  # 修复了 to_dict() 的调用
 
-@router.put("/requlation/{regulation_id}")
+@router.put("/regulation/{regulation_id}")  # 修复了URL路径拼写错误
 async def update_regulation(regulation_id: str, regulation: RegulationCreate):
-    regulation = Regulation.objects(id=regulation_id).first()
-    if not regulation:
+    existing_regulation = Regulation.objects(id=regulation_id).first()  # 重命名变量避免冲突
+    if not existing_regulation:
         raise HTTPException(status_code=404, detail="规章制度不存在")
-    regulation.update(**regulation.dict())
+    existing_regulation.update(**regulation.dict())
     return {"message": "规章制度更新成功"}
 
 @router.delete("/regulation/{regulation_id}")

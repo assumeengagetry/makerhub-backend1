@@ -37,6 +37,11 @@ class Settings(pydantic.ConfigDict):
     # CORS
     CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000"]
 
+    # 微信小程序配置
+    WECHAT_APPID = "your-appid"
+    WECHAT_SECRET = "your-secret"
+    WECHAT_LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session"
+
     class Config:
         case_sensitive = True
 
