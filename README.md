@@ -76,7 +76,7 @@ docker-compose down
 
 服务启动后访问：
 
-- API文档：`https://your-domain.com/docs`
+- API文档：`https://localhost:5000/api/docs`
 - MinIO控制台：`http://localhost:9001` (默认账号：`minioadmin/minioadmin`)
 
 ## 配置说明
@@ -90,9 +90,9 @@ DATABASE_NAME=society_db
 
 # MinIO 配置
 MINIO_ENDPOINT=minio:9000
-MINIO_ACCESS_KEY=your-access-key
-MINIO_SECRET_KEY=your-secret-key
-MINIO_BUCKET=society-files
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+MINIO_BUCKET=makerhub-files
 
 # 应用配置
 SECRET_KEY=your-secret-key
@@ -104,7 +104,7 @@ TOKEN_EXPIRE_MINUTES=1440
 ```nginx
 server {
     listen 80;
-    server_name your-domain.com;
+    server_name assumeengage.com;
 
     location / {
         proxy_pass http://backend:8000;
