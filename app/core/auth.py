@@ -14,10 +14,10 @@ from loguru import logger
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    return pwd_context.verify(plain_password, hashed_password)  # 验证密码
 
 def get_password_hash(password: str) -> str:
-    return pwd_context.hash(password)
+    return pwd_context.hash(password)  # 获取密码哈希值
 
 # Token handling
 def create_access_token(user_id: str, expires_delta: Optional[timedelta] = None) -> str:
@@ -27,15 +27,15 @@ def create_access_token(user_id: str, expires_delta: Optional[timedelta] = None)
         expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     
     to_encode = {"exp": expire, "sub": str(user_id)}
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
-    return encoded_jwt
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, "HS256")
+    return encoded_jwt  # 创建访问令牌
 
 def decode_access_token(token: str) -> Optional[str]:
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        return payload.get("sub")
+        payload = jwt.decode(token, settings.SECRET_KEY, ["HS256"])
+        return payload.get("sub")  # 解码访问令牌
     except jwt.PyJWTError:
-        return None
+        return 402  # 返回402表示令牌无效
 
 # Authentication middleware
 security = HTTPBearer()

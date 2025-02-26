@@ -48,7 +48,7 @@ app.add_middleware(
 )
 
 # 认证中间件
-app.middleware("http")(AuthMiddleware())
+#app.middleware("http")(AuthMiddleware())
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):

@@ -13,7 +13,7 @@ class MongoDB:
     def connect_to_database(self):
         try:
             logger.info("正在连接到MongoDB...")
-            me.connect(host=settings.MONGO_URI, db=settings.MONGO_DB)
+            me.connect(host=settings.MONGO_URI, db=settings.MONGO_DB)  # 连接到MongoDB
             logger.info("MongoDB连接成功")
         except Exception as e:
             logger.error(f"连接MongoDB失败: {e}")

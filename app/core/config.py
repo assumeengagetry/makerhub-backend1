@@ -3,7 +3,7 @@ from typing import List
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv()  # 加载环境变量
 
 class Settings(pydantic.ConfigDict):
     # 项目设置
@@ -26,7 +26,7 @@ class Settings(pydantic.ConfigDict):
     # JWT
     SECRET_KEY: str = os.getenv("SECRET_KEY", "_assume060801Xsk_")
     ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "2880"))
 
     # 应用设置
     DEBUG: bool = os.getenv("DEBUG", "True").lower() == "true"
@@ -40,4 +40,4 @@ class Settings(pydantic.ConfigDict):
     class Config:
         case_sensitive = True
 
-settings = Settings()
+settings = Settings()  # 实例化配置类
