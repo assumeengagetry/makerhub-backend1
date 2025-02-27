@@ -2,14 +2,14 @@ from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
 from loguru import logger
-from app.core.db import mongo
+from app.core.db import mongodb
 from app.models.b6orrow_stuff_model import BorrowRecord
 
 class BorrowService:
     """借用服务类"""
     
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb()
         self.collection = self.db.borrows
 
     async def create_borrow(self, borrow: BorrowRecord) -> dict:

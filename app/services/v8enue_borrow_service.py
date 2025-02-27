@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from app.core.db import mongodb
 from app.models.v8enue_borrow_model import VenueBorrow
 
 class VenueService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb()
         self.collection = self.db.site_borrows
 
     async def create_venue_request(self, request: VenueBorrow) -> dict:

@@ -1,12 +1,12 @@
 from typing import List
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from app.core.db import mongodb
 from app.models.m15essage_model import Message
 
 class MessageService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb()
         self.collection = self.db.messages
 
     async def send_message(self, message: Message) -> dict:

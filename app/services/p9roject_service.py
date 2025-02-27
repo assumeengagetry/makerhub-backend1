@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from app.core.db import mongodb
 from app.models.p9roject_model import Project
 
 class ProjectService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb()
         self.collection = self.db.projects
 
     async def create_project(self, project: Project) -> dict:

@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from app.core.db import mongodb
 from app.models.s14chedule_model import Schedule
 
 class ScheduleService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb()
         self.collection = self.db.arrangements
 
     async def create_schedule(self, schedule: Schedule) -> dict:
