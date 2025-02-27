@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from app.core.db import mongodb  # 修改为使用统一的数据库连接
 from app.models.t5ask_model import Task
 
 class TaskService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb.get_database()
         self.collection = self.db.tasks
 
     async def create_task(self, task: Task) -> dict:

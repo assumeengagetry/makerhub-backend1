@@ -4,8 +4,10 @@ from mongoengine import Document, StringField, FloatField, DateTimeField
 from .base_model import BaseModel
 
 class DutyRecord(BaseModel):
-    meta = {'collection': 'duty_records'}
-    
+    meta = {'collection': 'duty_records',
+            'indexes': ['record_id', 'userid']
+            }
+    record_id = StringField(required=True, unique=True)
     name = StringField(required=True)
     userid = StringField(required=True)
     start_time = DateTimeField(required=True)

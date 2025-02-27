@@ -1,12 +1,12 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from app.core.db import mongodb
 from app.models.p3rinter_model import PrinterApplication
 
 class PrinterService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb()
         self.collection = self.db.print_requests
 
     async def create_print_request(self, request: PrinterApplication) -> dict:

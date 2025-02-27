@@ -22,12 +22,10 @@ async def create_print_request(print_request: PrintCreate):
             "data" :{"apply_id": str(new_print.apply_id)}
             }
 
-@router.get("/print/history/{apply_id}")
-async def get_print_request(apply_id: str):
-    print_req = PrinterApplication.objects(apply_id=apply_id).first()
-    if not print_req:
-        raise HTTPException(status_code=404, detail="打印申请不存在")
-    return print_req.dict()
+@router.get("/print/history/{user_id}")
+async def get_print_request(user_id: str):
+    print_req = PrinterApplication.objects(user_id=user_id)
+    return print_req.to_dict()
 
 @router.put("/print/{apply_id}")
 async def update_print_status(apply_id: str, state: int, reason: Optional[str] = None):
@@ -42,7 +40,7 @@ async def update_print_status(apply_id: str, state: int, reason: Optional[str] =
     return {"message": "打印申请状态更新成功"}
 
 
-@router.get("/api/3d_print/history/{userid}")
+@router.get("/api/print/history/{userid}")
 async def get_user_history_printer(
     userid: str,
     user = Depends(AuthMiddleware.get_current_user)

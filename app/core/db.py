@@ -30,23 +30,7 @@ class MongoDB:
         except Exception as e:
             logger.error(f"连接MongoDB失败: {e}")
             raise e
-
-    def _ensure_collections(self):
-        """确保所有必要的集合存在"""
-        required_collections = ['users', 'regulations','printers',
-                                'events','tasks','borrow_stuff','stuffs',
-                                'borrow_venue','projects','competitions',
-                                'duty_apply','duty_record','cleaning',
-                                'schedule','xiumi']  
-        # 这个地方我先没想好messages需不需要加进去，因为他是写一个消息池去轮询
-        # 添加其他必要的集合名称
-        existing_collections = self.db.list_collection_names()
         
-        for collection in required_collections:
-            if collection not in existing_collections:
-                logger.info(f"创建集合: {collection}")
-                self.db.create_collection(collection)
-
     def close_database_connection(self):
         try:
             logger.info("正在关闭MongoDB连接...")
@@ -54,27 +38,6 @@ class MongoDB:
             logger.info("MongoDB连接已关闭")
         except Exception as e:
             logger.error(f"关闭MongoDB连接失败: {e}")
-
-    def create_indexes(self):
-        try:
-            logger.info("正在创建MongoDB索引...")
-           
-            # 为users集合创建索引
-            self.db.users.create_index("userid", unique=True)
-            logger.info("users集合索引创建成功")
-            
-            # 为duty_records集合创建索引
-            self.db.duty_records.create_index("userid")
-            logger.info("duty_records集合索引创建成功")
-            
-            # 为borrow_records集合创建索引
-            self.db.borrow_records.create_index("apply_id", unique=True)
-            logger.info("borrow_records集合索引创建成功")
-            
-            logger.info("所有MongoDB索引创建完成")
-        except Exception as e:
-            logger.error(f"创建MongoDB索引失败: {e}")
-            raise e
 
     def get_db(self) -> Generator:
         try:

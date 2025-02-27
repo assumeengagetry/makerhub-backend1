@@ -1,14 +1,18 @@
 from typing import List, Optional
+from datetime import datetime
 from bson import ObjectId
-from app.models.r2egulation_model import Regulation
 from app.core.db import mongodb
+from app.models.r2egulation_model import Regulation
 
 class RegulationService:
     def __init__(self):
-        self.db = mongodb()
-        self.collection = self.db.rules
+        self.db = mongodb.get_database()
+        self.collection = self.db.regulations
 
-    async def get_regulation(self, rule_id: str) -> Optional[dict]:
-        if not ObjectId.is_valid(rule_id):
+    async def get_regulation(self, regulation_id: str) -> Optional[dict]:
+        if not ObjectId.is_valid(regulation_id):
             return None
-        return await self.collection.find_one({"_id": ObjectId(rule_id)})
+        doc = await self.collection.find_one({"_id": ObjectId(regulation_id)})
+        if doc:
+            doc["id"] = str(doc["_id"])
+        return doc

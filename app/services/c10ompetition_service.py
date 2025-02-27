@@ -1,19 +1,25 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from loguru import logger
+from app.core.db import mongodb
 from app.models.c10ompetition_model import Competition
 
 class CompetitionService:
     def __init__(self):
-        self.db = mongo()
-        self.collection = self.db.games
+        self.db = mongodb.get_database()
+        self.collection = self.db.competitions
 
-    async def create_competition(self, game: Competition) -> dict:
-        game_dict = game.dict(exclude_unset=True)
-        game_dict["created_at"] = datetime.utcnow()
-        result = await self.collection.insert_one(game_dict)
-        return {"id": str(result.inserted_id)}
+    async def create_competition(self, competition: Competition) -> dict:
+        try:
+            competition_dict = competition.dict(exclude_unset=True)
+            competition_dict["created_at"] = datetime.utcnow()
+            result = await self.collection.insert_one(competition_dict)
+            logger.info(f"比赛创建成功: {result.inserted_id}")
+            return {"id": str(result.inserted_id)}
+        except Exception as e:
+            logger.error(f"创建比赛失败: {e}")
+            raise
 
     async def get_competition(self, game_id: str) -> Optional[dict]:
         if not ObjectId.is_valid(game_id):

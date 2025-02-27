@@ -1,10 +1,13 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from app.models.e4vent_model import Event
+from app.services.e4vent_service import EventService
+from app.core.auth import require_admin, AuthMiddleware
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
 
 router = APIRouter()
+event_service = EventService()
 
 class EventCreate(BaseModel):
     event_id: str
@@ -17,19 +20,26 @@ class EventCreate(BaseModel):
     end_time: datetime
     registration_deadline: datetime
 
-@router.post("/event")
-async def create_event(event: EventCreate):
-    new_event =  Event(**event.dict()).save()
-    return {"message": "活动创建成功", "id": str(new_event.id)}
+@router.post("/events/post", summary="创建活动")
+async def create_event(
+    event: EventCreate,
+    _=Depends(require_admin)  # 需要管理员权限
+):
+    result = await event_service.create_event(Event(**event.dict()))
+    return {"code": 200, "id": result["id"]}
 
-@router.get("/events")
-async def get_events():
-    events =  Event.objects().all()
-    return [event.dict() for event in events]
+@router.get("/events/view", summary="获取活动列表")
+async def list_events(
+    current_user = Depends(AuthMiddleware.get_current_user)  # 允许所有登录用户访问
+):
+    return await event_service.list_events()
 
-@router.get("/event/{event_id}")
-async def get_event(event_id: str):
-    event =  Event.objects(event_id=event_id).first()
+@router.get("/event/details/{event_id}", summary="获取活动详情")
+async def get_event(
+    event_id: str,
+    current_user = Depends(AuthMiddleware.get_current_user)  # 允许所有登录用户访问
+):
+    event = await event_service.get_event(event_id)
     if not event:
         raise HTTPException(status_code=404, detail="活动不存在")
-    return event.dict()
+    return event

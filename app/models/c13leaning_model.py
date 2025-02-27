@@ -3,7 +3,9 @@ from datetime import datetime
 from .base_model import BaseModel
 
 class CleaningRecord(BaseModel):
-    meta = {'collection': 'cleaning_records'}
+    meta = {'collection': 'cleaning_records',
+            'indexes': ['record_id', 'userid']
+            }
     
     record_id = StringField(required=True, unique=True)
     name = StringField(required=True)

@@ -5,7 +5,9 @@ from datetime import datetime
 from .base_model import BaseModel
 
 class Stuff(BaseModel):
-    meta = {'collection': 'items'}
+    meta = {'collection': 'items',
+            'indexes': ['stuff_id', 'type']
+            }
     
     stuff_id = StringField(required=True, unique=True)
     type = StringField(required=True)

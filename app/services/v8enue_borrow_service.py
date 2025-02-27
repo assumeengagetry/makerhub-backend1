@@ -41,3 +41,11 @@ class VenueService:
             doc["id"] = str(doc["_id"])
             requests.append(doc)
         return requests
+
+    async def get_venue_request(self, apply_id: str) -> Optional[dict]:
+        if not ObjectId.is_valid(apply_id):
+            return None
+        doc = await self.collection.find_one({"_id": ObjectId(apply_id)})
+        if doc:
+            doc["id"] = str(doc["_id"])
+        return doc

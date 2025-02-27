@@ -1,19 +1,28 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from app.core.db import mongodb  # 使用统一的数据库连接
 from app.models.x16iumi_model import XiumiLink
+from loguru import logger
 
 class XiumiService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb.get_database()
         self.collection = self.db.publicity_links
 
     async def create_link(self, link: XiumiLink) -> dict:
-        link_dict = link.dict(exclude_unset=True)
-        link_dict["created_at"] = datetime.utcnow()
-        result = await self.collection.insert_one(link_dict)
-        return {"id": str(result.inserted_id)}
+        try:
+            link_dict = link.dict(exclude_unset=True)
+            link_dict.update({
+                "created_at": datetime.utcnow(),
+                "updated_at": datetime.utcnow()
+            })
+            result = await self.collection.insert_one(link_dict)
+            logger.info(f"宣传链接创建成功: {result.inserted_id}")
+            return {"id": str(result.inserted_id)}
+        except Exception as e:
+            logger.error(f"创建宣传链接失败: {e}")
+            raise
 
     async def get_links(self, filters: dict = None) -> List[dict]:
         query = filters or {}

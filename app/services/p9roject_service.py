@@ -49,3 +49,9 @@ class ProjectService:
             {"$set": {"project_state": 0}}
         )
         return result.modified_count > 0
+
+    async def delete_project(self, project_id: str) -> bool:
+        if not ObjectId.is_valid(project_id):
+            return False
+        result = await self.collection.delete_one({"_id": ObjectId(project_id)})
+        return result.deleted_count > 0

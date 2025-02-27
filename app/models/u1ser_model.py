@@ -14,9 +14,3 @@ class User(BaseModel):
         'collection': 'users',
         'indexes': ['userid', 'phone_num', 'real_name', 'level', 'state']
     }
-    def to_dict(self):
-        return {
-            "userid": self.userid,
-            "phone": self.phone_num,
-            "permission_level": self.level,
-        }

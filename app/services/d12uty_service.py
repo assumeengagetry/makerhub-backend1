@@ -1,13 +1,14 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from loguru import logger
+from app.core.db import mongodb
 from app.models.d11uty_apply_model import DutyApply
 from app.models.d12uty_model import DutyRecord
 
 class DutyService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb.get_database()
         self.apply_collection = self.db.duty_applies
         self.record_collection = self.db.duty_records
 
@@ -18,10 +19,16 @@ class DutyService:
         return {"id": str(result.inserted_id)}
 
     async def create_duty_record(self, record: DutyRecord) -> dict:
-        record_dict = record.dict(exclude_unset=True)
-        record_dict["created_at"] = datetime.utcnow()
-        result = await self.record_collection.insert_one(record_dict)
-        return {"id": str(result.inserted_id)}
+        try:
+            record_dict = record.dict(exclude_unset=True)
+            record_dict["created_at"] = datetime.utcnow()
+            record_dict["updated_at"] = datetime.utcnow()
+            result = await self.record_collection.insert_one(record_dict)
+            logger.info(f"值班记录创建成功: {result.inserted_id}")
+            return {"id": str(result.inserted_id)}
+        except Exception as e:
+            logger.error(f"创建值班记录失败: {e}")
+            raise
 
     async def get_duty_applies(self, filters: dict = None) -> List[dict]:
         query = filters or {}
@@ -47,3 +54,11 @@ class DutyService:
             {"$set": data}
         )
         return result.modified_count > 0
+
+    async def delete_duty_apply(self, apply_id: str) -> bool:
+        try:
+            result = await self.apply_collection.delete_one({"_id": ObjectId(apply_id)})
+            return result.deleted_count > 0
+        except Exception as e:
+            logger.error(f"删除值班申请失败: {e}")
+            raise

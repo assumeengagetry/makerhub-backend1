@@ -30,3 +30,11 @@ class ScheduleService:
             doc["id"] = str(doc["_id"])
             schedules.append(doc)
         return schedules
+
+    async def get_schedule(self, schedule_id: str) -> Optional[dict]:
+        if not ObjectId.is_valid(schedule_id):
+            return None
+        doc = await self.collection.find_one({"_id": ObjectId(schedule_id)})
+        if doc:
+            doc["id"] = str(doc["_id"])
+        return doc

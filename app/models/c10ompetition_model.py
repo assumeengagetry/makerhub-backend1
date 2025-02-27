@@ -2,9 +2,15 @@ from mongoengine import Document, StringField, DateTimeField
 from .base_model import BaseModel
 
 class Competition(BaseModel):
-    meta = {'collection': 'competitions'}
+    meta = {
+        'collection': 'competitions',
+        'indexes': [
+            'competition_id',
+            'created_at'
+        ]
+    }
     
-    game_id = StringField(required=True, unique=True)
+    competition_id = StringField(required=True, unique=True)
     name = StringField(required=True)
     wx_num = StringField()
     qq_num = StringField()

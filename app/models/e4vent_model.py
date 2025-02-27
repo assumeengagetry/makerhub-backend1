@@ -18,3 +18,4 @@ class Event(BaseModel):
         'collection': 'events',
         'indexes': ['event_id', 'event_name']
     }
+

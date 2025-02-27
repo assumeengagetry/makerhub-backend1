@@ -1,20 +1,26 @@
 from typing import List, Optional
 from datetime import datetime
 from bson import ObjectId
-from app.core.db import mongo
+from loguru import logger
+from app.core.db import mongodb
 from app.models.c13leaning_model import CleaningRecord
 
 class CleaningService:
     def __init__(self):
-        self.db = mongo()
+        self.db = mongodb.get_database()
         self.collection = self.db.cleaning_records
 
     async def create_cleaning_record(self, record: CleaningRecord) -> dict:
-        record_dict = record.dict(exclude_unset=True)
-        record_dict["created_at"] = datetime.utcnow()
-        record_dict["updated_at"] = datetime.utcnow()
-        result = await self.collection.insert_one(record_dict)
-        return {"id": str(result.inserted_id)}
+        try:
+            record_dict = record.dict(exclude_unset=True)
+            record_dict["created_at"] = datetime.utcnow()
+            record_dict["updated_at"] = datetime.utcnow()
+            result = await self.collection.insert_one(record_dict)
+            logger.info(f"创建清洁记录成功: {result.inserted_id}")
+            return {"id": str(result.inserted_id)}
+        except Exception as e:
+            logger.error(f"创建清洁记录失败: {e}")
+            raise
 
     async def get_cleaning_records(self, user_id: str = None) -> List[dict]:
         query = {"userid": user_id} if user_id else {}
