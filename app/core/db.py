@@ -33,7 +33,13 @@ class MongoDB:
 
     def _ensure_collections(self):
         """确保所有必要的集合存在"""
-        required_collections = ['users', 'duty_records', 'borrow_records']
+        required_collections = ['users', 'regulations','printers',
+                                'events','tasks','borrow_stuff','stuffs',
+                                'borrow_venue','projects','competitions',
+                                'duty_apply','duty_record','cleaning',
+                                'schedule','xiumi']  
+        # 这个地方我先没想好messages需不需要加进去，因为他是写一个消息池去轮询
+        # 添加其他必要的集合名称
         existing_collections = self.db.list_collection_names()
         
         for collection in required_collections:

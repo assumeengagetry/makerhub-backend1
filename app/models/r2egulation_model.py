@@ -12,3 +12,11 @@ class Regulation(BaseModel):
         'collection': 'regulations',
         'indexes': ['regulation_id']
     }
+    def to_dict(self):
+        return {
+            "regulation_id": self.regulation_id,
+            "regulation_name": self.regulation_name,
+            "regulation_content": self.regulation_content,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+        }

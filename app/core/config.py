@@ -28,6 +28,13 @@ class Settings(pydantic.ConfigDict):
     ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "2880"))
 
+    # 权限等级定义
+    PERMISSION_LEVELS = {
+        "USER": 0,      # 普通用户
+        "ADMIN": 1,     # 管理员
+        "SUPER": 2      # 超级管理员
+    }
+
     # 应用设置
     DEBUG: bool = os.getenv("DEBUG", "True").lower() == "true"
     HOST: str = os.getenv("HOST", "0.0.0.0")

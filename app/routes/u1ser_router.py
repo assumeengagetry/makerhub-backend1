@@ -17,9 +17,10 @@ class WxLoginRequest(BaseModel):
 async def wx_login(request: WxLoginRequest):
     try:
         async with aiohttp.ClientSession() as session:
-            # 请求微信接口获取openid
+            # 请求微信接口获取openild
             async with session.get(
                 settings.WECHAT_LOGIN_URL,
+                
                 params={
                     'appid': settings.WECHAT_APPID,
                     'secret': settings.WECHAT_SECRET,
