@@ -42,11 +42,47 @@ async def wx_login(request: WxLoginRequest):
         logger.error(f"微信登录失败: {str(e)}")
         raise HTTPException(status_code=500, detail="登录失败")
     
-@router.post("/forntend-login")
-async def frontend_login(openid):
+
+
+
+@router.get("/user")
+async def get_user(openid: str):
     try:
-        return await user_service.create_or_update_wx_user(openid)
-    except Exception :
-        raise HTTPException(status_code=500, detail="登录失败")
+        user = await user_service.get_user(openid)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        return {
+            "code": 200,
+            "data": user
+        }
+    except Exception as e:
+        logger.error(f"获取用户信息失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="获取用户信息失败")
 
+@router.put("/real_name")
+async def update_user_realname(openid: str, real_name: str):
+    try:
+        result = await user_service.update_user_realname(openid, real_name)
+        if not result:
+            raise HTTPException(status_code=404, detail="User not found")
+        return {
+            "code": 200,
+            "message": "Real name updated successfully"
+        }
+    except Exception as e:
+        logger.error(f"更新用户真实姓名失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="更新用户真实姓名失败")
 
+@router.post("/user_profile")
+async def update_user_profile(openid: str,):
+    try:
+        result = await user_service.update_user_profile(openid, profile_photo)
+        if not result:
+            raise HTTPException(status_code=404, detail="User not found")
+        return {
+            "code": 200,
+            "message": "Profile photo updated successfully"
+        }
+    except Exception as e:
+        logger.error(f"更新用户头像失败: {str(e)}")
+        raise HTTPException(status_code=500, detail="更新用户头像失败")

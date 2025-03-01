@@ -20,6 +20,7 @@ def decode_token(token: str) -> Optional[str]:
         return payload.get("sub")
     except jwt.PyJWTError:
         return None
+        
 
 class AuthMiddleware:
     NO_AUTH_PATHS = {

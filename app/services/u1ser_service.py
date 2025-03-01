@@ -57,3 +57,14 @@ class UserService:
             return False
         except Exception:
             return False
+        
+    async def update_user_realname(self, user_id: str, real_name: str) -> bool:
+        try:
+            user = User.objects(userid=user_id).first()
+            if user:
+                user.real_name = real_name
+                user.save()
+                return True
+            return False
+        except Exception:
+            return False
