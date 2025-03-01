@@ -69,11 +69,3 @@ db.users.insertOne({
     score: 100,
     created_at: new Date()
 });
-
-// 设置初始配置
-db.rules.insertOne({
-    file_id: "initial_rules",
-    file_name: "社团基本规章制度",
-    content: "请在这里添加基本规章制度内容",
-    created_at: new Date()
-});
