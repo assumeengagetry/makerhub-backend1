@@ -18,4 +18,20 @@ class Event(BaseModel):
         'collection': 'events',
         'indexes': ['event_id', 'event_name']
     }
+    def to_dict(self):
+        """转换为字典格式"""
+        return {
+            "id": str(self.id),
+            "event_id": self.event_id,
+            "event_name": self.event_name,
+            "poster": self.poster,
+            "description": self.description,
+            "location": self.location,
+            "link": self.link,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "registration_deadline": self.registration_deadline,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }
 

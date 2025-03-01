@@ -18,3 +18,22 @@ class PrinterApplication(BaseModel):
         'collection': 'printer_applications',
         'indexes': ['apply_id', 'userid']
     }
+    def to_dict(self):
+        """转换为字典格式"""
+        return {
+            "id": str(self.id),
+            "apply_id": self.apply_id,
+            "userid": self.userid,
+            "phone_num": self.phone_num,
+            "score": self.score,
+            "score_change": self.score_change,
+            "name": self.name,
+            "quantity": self.quantity,
+            "printer": self.printer,
+            "file_zip": self.file_zip,
+            "state": self.state,
+            "reason": self.reason,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }
+    

@@ -1,43 +1,28 @@
-from typing import List, Optional
-from datetime import datetime
-from bson import ObjectId
-from app.core.db import mongodb  # 使用统一的数据库连接
+from typing import List
 from app.models.x16iumi_model import XiumiLink
-from loguru import logger
 
 class XiumiService:
-    def __init__(self):
-        self.db = mongodb.get_database()
-        self.collection = self.db.publicity_links
-
-    async def create_link(self, link: XiumiLink) -> dict:
+    async def create_link(self, link_data: dict) -> dict:
         try:
-            link_dict = link.dict(exclude_unset=True)
-            link_dict.update({
-                "created_at": datetime.utcnow(),
-                "updated_at": datetime.utcnow()
-            })
-            result = await self.collection.insert_one(link_dict)
-            logger.info(f"宣传链接创建成功: {result.inserted_id}")
-            return {"id": str(result.inserted_id)}
+            link = XiumiLink(**link_data)
+            link.save()
+            return {"id": str(link.id)}
         except Exception as e:
             logger.error(f"创建宣传链接失败: {e}")
             raise
 
     async def get_links(self, filters: dict = None) -> List[dict]:
         query = filters or {}
-        links = []
-        cursor = self.collection.find(query).sort("created_at", -1)
-        async for doc in cursor:
-            doc["id"] = str(doc["_id"])
-            links.append(doc)
-        return links
+        links = XiumiLink.objects(**query).order_by("-created_at")
+        return [link.to_dict() for link in links]
 
     async def delete_link(self, link_id: str) -> bool:
-        if not ObjectId.is_valid(link_id):
+        try:
+            link = XiumiLink.objects.get(id=link_id)
+            link.delete()
+            return True
+        except XiumiLink.DoesNotExist:
             return False
-        result = await self.collection.delete_one({"_id": ObjectId(link_id)})
-        return result.deleted_count > 0
 
     async def get_user_links(self, userid: str) -> List[dict]:
         return await self.get_links({"userid": userid})

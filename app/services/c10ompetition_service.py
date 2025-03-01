@@ -1,47 +1,44 @@
 from typing import List, Optional
-from datetime import datetime
-from bson import ObjectId
 from loguru import logger
-from app.core.db import mongodb
 from app.models.c10ompetition_model import Competition
 
 class CompetitionService:
-    def __init__(self):
-        self.db = mongodb.get_database()
-        self.collection = self.db.competitions
-
-    async def create_competition(self, competition: Competition) -> dict:
+    async def create_competition(self, competition_data: dict) -> dict:
         try:
-            competition_dict = competition.dict(exclude_unset=True)
-            competition_dict["created_at"] = datetime.utcnow()
-            result = await self.collection.insert_one(competition_dict)
-            logger.info(f"比赛创建成功: {result.inserted_id}")
-            return {"id": str(result.inserted_id)}
+            competition = Competition(**competition_data)
+            competition.save()
+            logger.info(f"比赛创建成功: {competition.id}")
+            return {"id": str(competition.id)}
         except Exception as e:
             logger.error(f"创建比赛失败: {e}")
             raise
 
     async def get_competition(self, game_id: str) -> Optional[dict]:
-        if not ObjectId.is_valid(game_id):
+        try:
+            competition = Competition.objects.get(id=game_id)
+            return competition.to_dict()
+        except Competition.DoesNotExist:
             return None
-        return await self.collection.find_one({"_id": ObjectId(game_id)})
 
     async def list_competitions(self, filters: dict = None) -> List[dict]:
         query = filters or {}
-        competitions = []
-        cursor = self.collection.find(query).sort("registration_start", 1)
-        async for doc in cursor:
-            doc["id"] = str(doc["_id"])
-            competitions.append(doc)
-        return competitions
+        competitions = Competition.objects(**query).order_by("+registration_start")
+        return [competition.to_dict() for competition in competitions]
 
     async def update_competition(self, game_id: str, game_data: dict) -> bool:
-        result = await self.collection.update_one(
-            {"_id": ObjectId(game_id)},
-            {"$set": game_data}
-        )
-        return result.modified_count > 0
+        try:
+            competition = Competition.objects.get(id=game_id)
+            for key, value in game_data.items():
+                setattr(competition, key, value)
+            competition.save()
+            return True
+        except Competition.DoesNotExist:
+            return False
 
     async def delete_competition(self, game_id: str) -> bool:
-        result = await self.collection.delete_one({"_id": ObjectId(game_id)})
-        return result.deleted_count > 0
+        try:
+            competition = Competition.objects.get(id=game_id)
+            competition.delete()
+            return True
+        except Competition.DoesNotExist:
+            return False

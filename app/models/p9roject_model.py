@@ -23,3 +23,26 @@ class Project(BaseModel):
         'collection': 'projects',
         'indexes': ['apply_id', 'project_name']
     }
+    def to_dict(self):
+        """转换为字典格式"""
+        return {
+            "id": str(self.id),
+            "apply_id": self.apply_id,
+            "project_name": self.project_name,
+            "director": self.director,
+            "college": self.college,
+            "major_grade": self.major_grade,
+            "phone_num": self.phone_num,
+            "email": self.email,
+            "mentor": self.mentor,
+            "description": self.description,
+            "application_file": self.application_file,
+            "prove_file": self.prove_file,
+            "member": self.member,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "audit_state": self.audit_state,
+            "project_state": self.project_state,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }

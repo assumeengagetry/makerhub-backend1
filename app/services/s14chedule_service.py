@@ -1,40 +1,30 @@
 from typing import List, Optional
-from datetime import datetime
-from bson import ObjectId
-from app.core.db import mongodb
 from app.models.s14chedule_model import Schedule
 
 class ScheduleService:
-    def __init__(self):
-        self.db = mongodb()
-        self.collection = self.db.arrangements
-
-    async def create_schedule(self, schedule: Schedule) -> dict:
-        schedule_dict = schedule.dict(exclude_unset=True)
-        schedule_dict["created_at"] = datetime.utcnow()
-        result = await self.collection.insert_one(schedule_dict)
-        return {"id": str(result.inserted_id)}
+    async def create_schedule(self, schedule_data: dict) -> dict:
+        schedule = Schedule(**schedule_data)
+        schedule.save()
+        return {"id": str(schedule.id)}
 
     async def update_schedule(self, schedule_id: str, data: dict) -> bool:
-        result = await self.collection.update_one(
-            {"_id": ObjectId(schedule_id)},
-            {"$set": data}
-        )
-        return result.modified_count > 0
+        try:
+            schedule = Schedule.objects.get(id=schedule_id)
+            for key, value in data.items():
+                setattr(schedule, key, value)
+            schedule.save()
+            return True
+        except Schedule.DoesNotExist:
+            return False
 
     async def get_schedules(self, filters: dict = None) -> List[dict]:
         query = filters or {}
-        schedules = []
-        cursor = self.collection.find(query).sort("order", 1)
-        async for doc in cursor:
-            doc["id"] = str(doc["_id"])
-            schedules.append(doc)
-        return schedules
+        schedules = Schedule.objects(**query).order_by("+order")
+        return [schedule.to_dict() for schedule in schedules]
 
     async def get_schedule(self, schedule_id: str) -> Optional[dict]:
-        if not ObjectId.is_valid(schedule_id):
+        try:
+            schedule = Schedule.objects.get(id=schedule_id)
+            return schedule.to_dict()
+        except Schedule.DoesNotExist:
             return None
-        doc = await self.collection.find_one({"_id": ObjectId(schedule_id)})
-        if doc:
-            doc["id"] = str(doc["_id"])
-        return doc

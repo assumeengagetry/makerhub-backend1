@@ -1,18 +1,11 @@
-from typing import List, Optional
-from datetime import datetime
-from bson import ObjectId
-from app.core.db import mongodb
+from typing import Optional
 from app.models.r2egulation_model import Regulation
+from mongoengine.errors import DoesNotExist, ValidationError
 
 class RegulationService:
-    def __init__(self):
-        self.db = mongodb.get_database()
-        self.collection = self.db.regulations
-
     async def get_regulation(self, regulation_id: str) -> Optional[dict]:
-        if not ObjectId.is_valid(regulation_id):
+        try:
+            regulation = Regulation.objects.get(id=regulation_id)
+            return regulation.to_dict()
+        except (DoesNotExist, ValidationError):
             return None
-        doc = await self.collection.find_one({"_id": ObjectId(regulation_id)})
-        if doc:
-            doc["id"] = str(doc["_id"])
-        return doc

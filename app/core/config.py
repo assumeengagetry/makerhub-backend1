@@ -11,9 +11,11 @@ class Settings(pydantic.ConfigDict):
     API_V1_STR: str = "/api"
     
     # MongoDB
-    MONGO_URI: str = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-    MONGO_DB: str = os.getenv("MONGO_DB", "makerhub_db")
-
+    MONGODB_DATABASE: str = os.getenv("MONGODB_DATABASE", "makerhub")
+    MONGODB_URL: str = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
+    MONGODB_USERNAME: str = os.getenv("MONGODB_USERNAME", "")
+    MONGODB_PASSWORD: str = os.getenv("MONGODB_PASSWORD", "")
+    
     # MinIO
     MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")
     MINIO_ACCESS_KEY: str = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
@@ -45,8 +47,8 @@ class Settings(pydantic.ConfigDict):
     CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000"]
 
     # 微信小程序配置
-    WECHAT_APPID = "your-appid"
-    WECHAT_SECRET = "your-secret"
+    WECHAT_APPID = "wx4f3a36d5ea82ed7d"
+    WECHAT_SECRET = "24b2a16a5981149b0287334beed24e88"
     WECHAT_LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session"
 
     class Config:

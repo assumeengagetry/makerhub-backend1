@@ -11,3 +11,6 @@ class BaseModel(Document):
             self.created_at = datetime.utcnow()
         self.updated_at = datetime.utcnow()
         return super().save(*args, **kwargs)
+    def to_dict(self):
+        """转换为字典格式"""
+        return {field: getattr(self, field) for field in self._fields}

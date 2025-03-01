@@ -32,3 +32,26 @@ class BorrowRecord(BaseModel):
     categories = IntField()  # 0: 个人, 1: 团队
     state = IntField(default=0)  # 0: 未审核, 1: 已审核
 
+    def to_dict(self):
+        """转换为字典格式"""
+        return {
+            "id": str(self.id),
+            "sb_id": self.sb_id,
+            "userid": self.userid,
+            "name": self.name,
+            "phone_num": self.phone_num,
+            "email": self.email,
+            "grade": self.grade,
+            "major": self.major,
+            "project_num": self.project_num,
+            "type": self.type,
+            "stuff_name": self.stuff_name,
+            "stuff_quantity_change": self.stuff_quantity_change,
+            "deadline": self.deadline,
+            "reason": self.reason,
+            "categories": self.categories,
+            "state": self.state,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }
+

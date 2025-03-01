@@ -1,41 +1,34 @@
 from typing import List
-from datetime import datetime
-from bson import ObjectId
-from app.core.db import mongodb
 from app.models.m15essage_model import Message
 
 class MessageService:
-    def __init__(self):
-        self.db = mongodb()
-        self.collection = self.db.messages
-
-    async def send_message(self, message: Message) -> dict:
-        message_dict = message.dict(exclude_unset=True)
-        message_dict["sent_at"] = datetime.utcnow()
-        message_dict["status"] = "unread"
-        
-        result = await self.collection.insert_one(message_dict)
-        return {"id": str(result.inserted_id)}
+    async def send_message(self, message_data: dict) -> dict:
+        message = Message(**message_data)
+        message.status = "unread"
+        message.save()
+        return {"id": str(message.id)}
 
     async def get_user_messages(self, user_id: str, status: str = None) -> List[dict]:
         query = {"receiver_id": user_id}
         if status:
             query["status"] = status
         
-        messages = []
-        cursor = self.collection.find(query).sort("sent_at", -1)
-        async for doc in cursor:
-            doc["id"] = str(doc["_id"])
-            messages.append(doc)
-        return messages
+        messages = Message.objects(**query).order_by("-sent_at")
+        return [message.to_dict() for message in messages]
 
     async def mark_as_read(self, message_id: str) -> bool:
-        result = await self.collection.update_one(
-            {"_id": ObjectId(message_id)},
-            {"$set": {"status": "read"}}
-        )
-        return result.modified_count > 0
+        try:
+            message = Message.objects.get(id=message_id)
+            message.status = "read"
+            message.save()
+            return True
+        except Message.DoesNotExist:
+            return False
 
     async def delete_message(self, message_id: str) -> bool:
-        result = await self.collection.delete_one({"_id": ObjectId(message_id)})
-        return result.deleted_count > 0
+        try:
+            message = Message.objects.get(id=message_id)
+            message.delete()
+            return True
+        except Message.DoesNotExist:
+            return False

@@ -10,3 +10,14 @@ class Schedule(BaseModel):
         'collection': 'schedules',
         'indexes': ['name', 'type']
     }
+    
+    def to_dict(self):
+        """转换为字典格式"""
+        return {
+            "id": str(self.id),
+            "name": self.name,
+            "type": self.type,
+            "order": self.order,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }

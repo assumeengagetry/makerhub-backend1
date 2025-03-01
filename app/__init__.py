@@ -1,14 +1,13 @@
-from app.main import app
-from app.core.config import settings
-from fastapi.testclient import TestClient 
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from loguru import logger
+from mongoengine import connect, disconnect
+from app.core.db import connect_to_mongodb, disconnect_from_mongodb
+from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.auth import AuthMiddleware
-from app.core.db import mongodb
-from fastapi import FastAPI, Request
 from app.routes import (
     u1ser_router,
     s14chedule_router, 

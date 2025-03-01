@@ -20,3 +20,23 @@ class VenueBorrow(BaseModel):
         'collection': 'venue_borrows',
         'indexes': ['apply_id', 'student_id']
     }
+    def to_dict(self):
+        """转换为字典格式"""
+        return {
+            "id": str(self.id),
+            "apply_id": self.apply_id,
+            "name": self.name,
+            "student_id": self.student_id,
+            "phonenum": self.phonenum,
+            "email": self.email,
+            "purpose": self.purpose,
+            "mentor_name": self.mentor_name,
+            "mentor_phone_num": self.mentor_phone_num,
+            "picture": self.picture,
+            "start_time": self.start_time,
+            "end_time": self.end_time,
+            "state": self.state,
+            "reason": self.reason,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }

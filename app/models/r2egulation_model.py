@@ -10,5 +10,16 @@ class Regulation(BaseModel):
 
     meta = {
         'collection': 'regulations',
-        'indexes': ['regulation_id']
+        'indexes': ['regulation_id'],
+        'ordering': ['-created_at']
     }
+
+    def to_dict(self):
+        return {
+            "id": str(self.id),
+            "regulation_id": self.regulation_id,
+            "regulation_name": self.regulation_name,
+            "regulation_content": self.regulation_content,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at
+        }
