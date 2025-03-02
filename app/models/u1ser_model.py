@@ -18,7 +18,6 @@ class User(BaseModel):
     def to_dict(self):
         """转换为字典格式"""
         return {
-            "id": str(self.id),
             "userid": self.userid,
             "level": self.level,
             "real_name": self.real_name,

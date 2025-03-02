@@ -12,9 +12,13 @@ class Settings(pydantic.ConfigDict):
     
     # MongoDB
     MONGODB_DATABASE: str = os.getenv("MONGODB_DATABASE", "makerhub")
-    MONGODB_URL: str = os.getenv("MONGODB_URL", "mongodb://localhost:27017")
-    MONGODB_USERNAME: str = os.getenv("MONGODB_USERNAME", "")
-    MONGODB_PASSWORD: str = os.getenv("MONGODB_PASSWORD", "")
+    MONGODB_URI: str = os.getenv("MONGODB_URI", "localhost:27017")
+    MONGODB_USERNAME: str = os.getenv("MONGODB_USERNAME", "root")
+    MONGODB_PASSWORD: str = os.getenv("MONGODB_PASSWORD", "123456")
+    MONGODB_AUTH_SOURCE: str = os.getenv("MONGODB_AUTH_SOURCE", "admin")
+    MONGODB_RETRY_WRITES: str = os.getenv("MONGODB_RETRY_WRITES", "true")
+    MONGODB_W: str = os.getenv("MONGODB_W", "majority")
+
     
     # MinIO
     MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")

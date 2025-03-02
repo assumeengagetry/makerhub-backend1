@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   backend:
@@ -13,8 +13,6 @@ services:
     depends_on:
       - mongo
       - minio
-    networks:
-      - society-network
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
@@ -32,10 +30,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - mongo_data:/data/db
       - ./docker/mongo/init.js:/docker-entrypoint-initdb.d/init.js:ro
-    networks:
-      - society-network
     restart: unless-stopped
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
@@ -52,10 +47,7 @@ services:
     ports:
       - "9000:9000"  # API Port
       - "9001:9001"  # Console Port
-    volumes:
-      - minio_data:/data
-    networks:
-      - society-network
+
     restart: unless-stopped
     command: server /data --console-address ":9001"
     healthcheck:
@@ -64,13 +56,4 @@ services:
       timeout: 10s
       retries: 3
 
-networks:
-  society-network:
-    name: makerhub-network
-    driver: bridge
 
-volumes:
-  mongo_data:
-    name: makerhub-mongo-data
-  minio_data:
-    name: makerhub-minio-data

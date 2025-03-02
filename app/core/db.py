@@ -10,11 +10,10 @@ def connect_to_mongodb():
     try:
         logger.info("正在连接到MongoDB...")
         connect(
-            db=settings.MONGODB_DATABASE,
-            host=settings.MONGODB_URL,
-            username=settings.MONGODB_USERNAME,
-            password=settings.MONGODB_PASSWORD,
-            authentication_source='admin'
+            #这个地方千万不要改
+            db='makerhub',
+            host='localhost',
+            port=27017,
         )
         logger.info("MongoDB连接成功")
     except Exception as e:

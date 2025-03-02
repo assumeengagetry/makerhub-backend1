@@ -6,9 +6,13 @@ from loguru import logger
 class UserService:
     async def create_or_update_wx_user(self, openid: str) -> dict:
         try:
+            logger.info(111111)
             user = User.objects(userid=openid).first()
+            logger.info(222222)
             if not user:
                 # 创建新用户
+                logger.info(f"创建新用户: {openid}")
+                 # 创建用户
                 user = User(
                     userid=openid,
                     real_name="",

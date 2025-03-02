@@ -1,7 +1,15 @@
 // filepath: /society-management/society-management/docker/mongo/init.js
+db = db.getSiblingDB('admin');  // 切换到 admin 数据库
 
+db.createUser({
+  user: "root",
+  pwd: "123456",
+  roles: [
+    { role: "readWrite", db: "makerhub" }
+  ]
+});
 // 创建数据库
-db = db.getSiblingDB('society_db');
+db = db.getSiblingDB('makerhub');
 
 // 创建集合
 db.createCollection('users');
