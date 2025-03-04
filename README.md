@@ -45,25 +45,8 @@ makerhub-backend1
 
 ## 快速开始
 
-### 环境准备
-
-1. 安装依赖工具：
-
-```bash
-curl -sSL https://install.python-poetry.org | python3 -
-pip install --user poetry
-sudo apt-get install docker docker-compose
 ```
 
-2. 复制环境文件：
-
-```bash
-cp .env.example .env
-```
-
-### 使用 Docker 部署
-
-```bash
 # 启动所有服务
 docker-compose up -d --build
 

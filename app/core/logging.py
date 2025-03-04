@@ -21,7 +21,7 @@ def setup_logging():
     logger.add(
         "logs/app_{time:YYYY-MM-DD}.log",
         rotation="00:00",  # 每天创建一个新日志文件
-        retention="30 days",  # 保留30天的日志
+        retention="7 days",  # 保留30天的日志
         compression="zip",  # 压缩日志文件
         level="INFO",
         encoding="utf-8"

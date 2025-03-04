@@ -8,6 +8,8 @@ starlette==0.26.1
 # Database
 motor==3.1.1
 mongoengine==0.27.0
+pymongo[srv]==4.5.0  # MongoDB URI支持
+dnspython==2.4.2     # MongoDB DNS解析
 
 # Storage
 minio==7.1.13
@@ -26,6 +28,7 @@ aiohttp==3.8.4
 jinja2==3.1.2
 pytz==2023.3
 python-dateutil==2.8.2
+requests==2.31.0     # HTTP请求
 
 # Testing
 pytest==7.3.1

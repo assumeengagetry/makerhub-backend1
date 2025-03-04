@@ -105,6 +105,12 @@ app.include_router(r2egulation_router.router, prefix=f"{PREFIX}/regulations", ta
 async def health_check():
     return {"status": "healthy", "version": app.version}
 
+@app.get("/")
+async def root():
+    return {"message": "fuck you !"}
+
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(

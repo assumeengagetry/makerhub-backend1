@@ -9,11 +9,13 @@ def connect_to_mongodb():
     """连接到MongoDB"""
     try:
         logger.info("正在连接到MongoDB...")
+        # 修改连接方式，使用环境变量中的配置
         connect(
-            #这个地方千万不要改
-            db='makerhub',
-            host='localhost',
-            port=27017,
+            db=settings.MONGODB_DATABASE,
+            username=settings.MONGODB_USERNAME,
+            password=settings.MONGODB_PASSWORD,
+            host=settings.MONGODB_URI,
+            authentication_source=settings.MONGODB_AUTH_SOURCE
         )
         logger.info("MongoDB连接成功")
     except Exception as e:
@@ -28,27 +30,38 @@ def disconnect_from_mongodb():
         logger.info("MongoDB连接已关闭")
     except Exception as e:
         logger.error(f"关闭MongoDB连接失败: {e}")
+
 # MinIO client
 class MinioClient:
     def __init__(self):
-        self.client = Minio(
-            settings.MINIO_ENDPOINT,
-            access_key=settings.MINIO_ACCESS_KEY,
-            secret_key=settings.MINIO_SECRET_KEY,
-            secure=False
-        )
-        self._ensure_bucket_exists()
+        try:
+            logger.info(f"Connecting to MinIO at {settings.MINIO_ENDPOINT}")
+            logger.info(f"Secure: {settings.MINIO_SECURE}")
+            self.client = Minio(
+                settings.MINIO_ENDPOINT,
+                access_key=settings.MINIO_ACCESS_KEY,
+                secret_key=settings.MINIO_SECRET_KEY,
+                secure=settings.MINIO_SECURE,
+                http_client=None  # 添加这行
+            )
+            self._ensure_bucket_exists()
+        except Exception as e:
+            logger.error(f"MinIO connection failed: {e}")
+            raise e
 
     def _ensure_bucket_exists(self):
-        # 检查桶是否存在，不存在则创建
-        if not self.client.bucket_exists(settings.MINIO_BUCKET):
-            self.client.make_bucket(settings.MINIO_BUCKET)
-            logger.info(f"Bucket '{settings.MINIO_BUCKET}' 创建成功")
-        else:
-            logger.info(f"Bucket '{settings.MINIO_BUCKET}' 已存在")
-        
+        try:
+            logger.info(f"Checking if bucket '{settings.MINIO_BUCKET}' exists")
+            if not self.client.bucket_exists(settings.MINIO_BUCKET):
+                logger.info(f"Creating bucket '{settings.MINIO_BUCKET}'")
+                self.client.make_bucket(settings.MINIO_BUCKET)
+                logger.info(f"Bucket '{settings.MINIO_BUCKET}' created successfully")
+            else:
+                logger.info(f"Bucket '{settings.MINIO_BUCKET}' already exists")
+        except Exception as e:
+            logger.error(f"Bucket operation failed: {e}")
+            raise e
 
-    
     def get_file(self, filename: str) -> tuple[bytes, str]:
         try:
             data = self.client.get_object(settings.MINIO_BUCKET, filename)

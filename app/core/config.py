@@ -11,28 +11,27 @@ class Settings(pydantic.ConfigDict):
     API_V1_STR: str = "/api"
     
     # MongoDB
-    MONGODB_DATABASE: str = os.getenv("MONGODB_DATABASE", "makerhub")
-    MONGODB_URI: str = os.getenv("MONGODB_URI", "localhost:27017")
-    MONGODB_USERNAME: str = os.getenv("MONGODB_USERNAME", "root")
-    MONGODB_PASSWORD: str = os.getenv("MONGODB_PASSWORD", "123456")
-    MONGODB_AUTH_SOURCE: str = os.getenv("MONGODB_AUTH_SOURCE", "admin")
-    MONGODB_RETRY_WRITES: str = os.getenv("MONGODB_RETRY_WRITES", "true")
-    MONGODB_W: str = os.getenv("MONGODB_W", "majority")
+    MONGODB_DATABASE: str = os.getenv("MONGODB_DATABASE")
+    MONGODB_URI: str = os.getenv("MONGODB_URI")
+    MONGODB_USERNAME: str = os.getenv("MONGODB_USERNAME")
+    MONGODB_PASSWORD: str = os.getenv("MONGODB_PASSWORD")
+    MONGODB_AUTH_SOURCE: str = os.getenv("MONGODB_AUTH_SOURCE")
+    MONGODB_RETRY_WRITES: str = os.getenv("MONGODB_RETRY_WRITES")
+    MONGODB_W: str = os.getenv("MONGODB_W")
 
     
     # MinIO
-    MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "localhost:9000")
+    MINIO_ENDPOINT: str = os.getenv("MINIO_ENDPOINT", "minio:9000")
     MINIO_ACCESS_KEY: str = os.getenv("MINIO_ACCESS_KEY", "minioadmin")
     MINIO_SECRET_KEY: str = os.getenv("MINIO_SECRET_KEY", "minioadmin")
+    MINIO_PUBLIC_URL: str = os.getenv("MINIO_PUBLIC_URL", "http://minio:9000")
     MINIO_BUCKET: str = os.getenv("MINIO_BUCKET", "makerhub-files")
-    MINIO_SECURE: bool = os.getenv("MINIO_SECURE", "False").lower() == "true"
-    MINIO_BUCKET_NAME: str = os.getenv("MINIO_BUCKET_NAME", "public-resources")
-    MINIO_PUBLIC_URL: str = os.getenv("MINIO_PUBLIC_URL", "http://localhost:9000")
+    MINIO_SECURE: bool = os.getenv("MINIO_SECURE", "false").lower() == "true"  # 确保是布尔值
 
     # JWT
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "_assume060801Xsk_")
-    ALGORITHM: str = os.getenv("ALGORITHM", "HS256")
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "2880"))
+    SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
+    ALGORITHM: str = os.getenv("JWT_ALGORITHM")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
     # 权限等级定义
     PERMISSION_LEVELS = {
