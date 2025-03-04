@@ -29,6 +29,7 @@ class AuthMiddleware:
         "/api/redoc",
         "/api/openapi.json",
         "/health",
+        "/"
     }
 
 

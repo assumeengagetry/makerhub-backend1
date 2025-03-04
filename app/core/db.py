@@ -1,4 +1,5 @@
-from mongoengine import connect, disconnect
+import mongoengine
+import os
 from minio import Minio
 from minio.error import S3Error
 from fastapi import HTTPException
@@ -10,13 +11,7 @@ def connect_to_mongodb():
     try:
         logger.info("正在连接到MongoDB...")
         # 修改连接方式，使用环境变量中的配置
-        connect(
-            db=settings.MONGODB_DATABASE,
-            username=settings.MONGODB_USERNAME,
-            password=settings.MONGODB_PASSWORD,
-            host=settings.MONGODB_URI,
-            authentication_source=settings.MONGODB_AUTH_SOURCE
-        )
+        mongoengine.connect(host=os.getenv("MONGODB_URI"))
         logger.info("MongoDB连接成功")
     except Exception as e:
         logger.error(f"连接MongoDB失败: {e}")
@@ -26,7 +21,7 @@ def disconnect_from_mongodb():
     """断开MongoDB连接"""
     try:
         logger.info("正在关闭MongoDB连接...")
-        disconnect()
+        mongoengine.disconnect()
         logger.info("MongoDB连接已关闭")
     except Exception as e:
         logger.error(f"关闭MongoDB连接失败: {e}")

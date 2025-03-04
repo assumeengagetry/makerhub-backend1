@@ -11,13 +11,7 @@ class Settings(pydantic.ConfigDict):
     API_V1_STR: str = "/api"
     
     # MongoDB
-    MONGODB_DATABASE: str = os.getenv("MONGODB_DATABASE")
     MONGODB_URI: str = os.getenv("MONGODB_URI")
-    MONGODB_USERNAME: str = os.getenv("MONGODB_USERNAME")
-    MONGODB_PASSWORD: str = os.getenv("MONGODB_PASSWORD")
-    MONGODB_AUTH_SOURCE: str = os.getenv("MONGODB_AUTH_SOURCE")
-    MONGODB_RETRY_WRITES: str = os.getenv("MONGODB_RETRY_WRITES")
-    MONGODB_W: str = os.getenv("MONGODB_W")
 
     
     # MinIO
