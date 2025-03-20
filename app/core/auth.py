@@ -24,7 +24,7 @@ def decode_token(token: str) -> Optional[str]:
 
 class AuthMiddleware:
     NO_AUTH_PATHS = {
-        "/api/v1/users/wx-login",
+        "/api/users/wx-login",
         "/api/docs",
         "/api/redoc",
         "/api/openapi.json",

@@ -24,13 +24,20 @@ async def wx_login(request: WxLoginRequest):
             
             logger.info({url})
             
-            
-            response = requests.get(url)
-            wx_response = response.json()
-            
-            
-            logger.info(wx_response)
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    data = await response.read()
+                    wx_response = json.loads(data)
 
+            logger.info(wx_response)
+            if 'errcode' in wx_response and wx_response['errcode'] != 0:
+                error_msg = wx_response.get('errmsg')
+                logger.error(f"微信的傻逼接口返回错误：{error_msg}")
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"微信登录失败:{error_msg}"
+
+                )
 
             openid = wx_response.get("openid")
             

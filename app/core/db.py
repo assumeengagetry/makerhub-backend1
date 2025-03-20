@@ -11,6 +11,7 @@ def connect_to_mongodb():
     try:
         logger.info("正在连接到MongoDB...")
         # 修改连接方式，使用环境变量中的配置
+        logger.info(os.getenv("MONGODB_URI"))
         mongoengine.connect(host=os.getenv("MONGODB_URI"))
         logger.info("MongoDB连接成功")
     except Exception as e:
@@ -39,30 +40,38 @@ class MinioClient:
                 secure=settings.MINIO_SECURE,
                 http_client=None  # 添加这行
             )
-            self._ensure_bucket_exists()
+            #self._ensure_bucket_exists()
+            logger.info(f"Connecting to Minio successfully")
         except Exception as e:
             logger.error(f"MinIO connection failed: {e}")
             raise e
 
-    def _ensure_bucket_exists(self):
-        try:
-            logger.info(f"Checking if bucket '{settings.MINIO_BUCKET}' exists")
-            if not self.client.bucket_exists(settings.MINIO_BUCKET):
-                logger.info(f"Creating bucket '{settings.MINIO_BUCKET}'")
-                self.client.make_bucket(settings.MINIO_BUCKET)
-                logger.info(f"Bucket '{settings.MINIO_BUCKET}' created successfully")
-            else:
-                logger.info(f"Bucket '{settings.MINIO_BUCKET}' already exists")
-        except Exception as e:
-            logger.error(f"Bucket operation failed: {e}")
-            raise e
+    # def _ensure_bucket_exists(self):
+    #     try:
+    #         logger.info(f"Checking if bucket '{settings.MINIO_BUCKET}' exists")
+    #         if not self.client.bucket_exists(settings.MINIO_BUCKET):
+    #             logger.info(f"Creating bucket '{settings.MINIO_BUCKET}'")
+    #             self.client.make_bucket(settings.MINIO_BUCKET)
+    #             logger.info(f"Bucket '{settings.MINIO_BUCKET}' created successfully")
+    #         else:
+    #             logger.info(f"Bucket '{settings.MINIO_BUCKET}' already exists")
+    #     except Exception as e:
+    #         logger.error(f"Bucket operation failed: {e}")
+    #         raise e
 
-    def get_file(self, filename: str) -> tuple[bytes, str]:
+    def get_file(self, filename: str, expire :3600) -> dict:
         try:
-            data = self.client.get_object(settings.MINIO_BUCKET, filename)
-            return data.read(), data.info().get("Content-Type", "application/octet-stream")
+            url = self.client.presigned_get_object(
+                settings.MINOIO_BUCKET,
+                filename,
+                expires= expire
+            )
+            return {
+                "url" : url
+            }
+               
         except S3Error as e:
-            raise HTTPException(status_code=404, detail=f"File not found: {str(e)}")
+            logger.error(f"get_file::url获取失败 ")
 
 # Initialize clients
 minio_client = MinioClient()

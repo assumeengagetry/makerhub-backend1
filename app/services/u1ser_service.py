@@ -6,8 +6,12 @@ from loguru import logger
 class UserService:
     async def create_or_update_wx_user(self, openid: str) -> dict:
         try:
-            logger.info(111111)
-            user = User.objects(userid=openid).first()
+            logger.info(333333)
+            try:
+                user = User.objects(userid=openid).first()
+            except Exception as e:
+                logger.error(f"数据库要不没连上，要不就是连上了创建用户失败：{e}")
+                
             logger.info(222222)
             if not user:
                 # 创建新用户
@@ -21,6 +25,8 @@ class UserService:
                     level=1
                 )
                 user.save()
+            else:
+                logger.info(f"the user already exits")
 
             token = create_access_token(openid)
             return {

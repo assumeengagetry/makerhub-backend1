@@ -3,29 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from loguru import logger
-from mongoengine import connect, disconnect
 from app.core.db import connect_to_mongodb, disconnect_from_mongodb
 from app.core.config import settings
 from app.core.logging import setup_logging
 from app.core.auth import AuthMiddleware
 from app.routes import (
     u1ser_router,
-    s14chedule_router, 
-    b6orrow_stuff_router,
-    s7tuff_router, 
-    d12uty_router,
-    d11uty_apply_router,
-    m15essage_router,
-    x16iumi_router,
-    c13leaning_router,
-    c10ompetition_router,
-    v8enue_router,
-    t5ask_router,
-    p3rinter_router,
-    p9roject_router,
-    e4vent_router,
-    r2egulation_router,
-    r17esource_router,
 )
 
 # 初始化应用
@@ -71,34 +54,34 @@ async def shutdown_event():
     logger.info("应用关闭 - 已断开MongoDB连接")
 
 # API路由注册
-PREFIX = "/api/v1"
+PREFIX = "/api"
 
 # 用户和认证
 app.include_router(u1ser_router.router, prefix=f"{PREFIX}/users", tags=["用户管理"])
 
-# 工作管理
-app.include_router(s14chedule_router.router, prefix=f"{PREFIX}/schedules", tags=["排班管理"])
-app.include_router(d12uty_router.router, prefix=f"{PREFIX}/duties", tags=["值班管理"])
-app.include_router(d11uty_apply_router.router, prefix=f"{PREFIX}/duty_apply", tags=["值班申請管理"])
-app.include_router(c13leaning_router.router, prefix=f"{PREFIX}/cleaning", tags=["清洁管理"])
-app.include_router(t5ask_router.router, prefix=f"{PREFIX}/tasks", tags=["任务管理"])
+# # 工作管理
+# app.include_router(s14chedule_router.router, prefix=f"{PREFIX}/schedules", tags=["排班管理"])
+# app.include_router(d12uty_router.router, prefix=f"{PREFIX}/duties", tags=["值班管理"])
+# app.include_router(d11uty_apply_router.router, prefix=f"{PREFIX}/duty_apply", tags=["值班申請管理"])
+# app.include_router(c13leaning_router.router, prefix=f"{PREFIX}/cleaning", tags=["清洁管理"])
+# app.include_router(t5ask_router.router, prefix=f"{PREFIX}/tasks", tags=["任务管理"])
 
-# 资源管理
-app.include_router(s7tuff_router.router, prefix=f"{PREFIX}/stuff", tags=["物品管理"])
-app.include_router(b6orrow_stuff_router.router, prefix=f"{PREFIX}/borrow_stuff", tags=["借用物品管理"])
-app.include_router(v8enue_router.router, prefix=f"{PREFIX}/venues", tags=["场地管理"])
-app.include_router(p3rinter_router.router, prefix=f"{PREFIX}/printers", tags=["打印管理"])
-app.include_router(r17esource_router.router, prefix=f"{PREFIX}/resources", tags=["MinIO资源"])
+# # 资源管理
+# app.include_router(s7tuff_router.router, prefix=f"{PREFIX}/stuff", tags=["物品管理"])
+# app.include_router(b6orrow_stuff_router.router, prefix=f"{PREFIX}/borrow_stuff", tags=["借用物品管理"])
+# app.include_router(v8enue_router.router, prefix=f"{PREFIX}/venues", tags=["场地管理"])
+# # app.include_router(p3rinter_router.router, prefix=f"{PREFIX}/printers", tags=["打印管理"])
+# app.include_router(r17esource_router.router, prefix=f"{PREFIX}/resources", tags=["MinIO资源"])
 
-# 活动管理
-app.include_router(e4vent_router.router, prefix=f"{PREFIX}/events", tags=["活动管理"])
-app.include_router(c10ompetition_router.router, prefix=f"{PREFIX}/competitions", tags=["比赛管理"])
-app.include_router(p9roject_router.router, prefix=f"{PREFIX}/projects", tags=["项目管理"])
+# # # 活动管理
+# app.include_router(e4vent_router.router, prefix=f"{PREFIX}/events", tags=["活动管理"])
+# # app.include_router(c10ompetition_router.router, prefix=f"{PREFIX}/competitions", tags=["比赛管理"])
+# # app.include_router(p9roject_router.router, prefix=f"{PREFIX}/projects", tags=["项目管理"])
 
-# 通信和文档
-app.include_router(m15essage_router.router, prefix=f"{PREFIX}/messages", tags=["消息管理"])
-app.include_router(x16iumi_router.router, prefix=f"{PREFIX}/xiumi", tags=["秀米管理"])
-app.include_router(r2egulation_router.router, prefix=f"{PREFIX}/regulations", tags=["规章制度"])
+# # 通信和文档
+# app.include_router(m15essage_router.router, prefix=f"{PREFIX}/messages", tags=["消息管理"])
+# app.include_router(x16iumi_router.router, prefix=f"{PREFIX}/xiumi", tags=["秀米管理"])
+# app.include_router(r2egulation_router.router, prefix=f"{PREFIX}/regulations", tags=["规章制度"])
 
 # 健康检查
 @app.get("/health")
